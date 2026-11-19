@@ -3,6 +3,7 @@ module Modern {
   typedef sequence<int32, 3> Ints;
   typedef map<Label, Ints, 8> StringMap;
 
+  @marker
   struct Values {
     int8 tiny;
     uint16 small;
