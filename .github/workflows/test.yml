@@ -1,0 +1,34 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out idl2xmi
+        uses: actions/checkout@v7
+
+      - name: Check out RIDL master
+        uses: actions/checkout@v7
+        with:
+          repository: RemedyIT/ridl
+          ref: master
+          path: _ridl
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Run tests
+        run: bundle exec rake test
+        env:
+          RUBYLIB: ${{ github.workspace }}/_ridl/lib

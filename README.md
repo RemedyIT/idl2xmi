@@ -15,23 +15,15 @@ IDL3 coverage are intentionally left as follow-up work.
 
 ```sh
 bin/setup
+git clone https://github.com/RemedyIT/ridl.git _ridl
+export RUBYLIB="$PWD/_ridl/lib${RUBYLIB:+:$RUBYLIB}"
 ```
 
-For development, expose this checkout as a RIDL backend:
-
-```sh
-export RIDL_BE_PATH="$PWD/lib"
-bundle exec ridlc :idl2xmi examples/basic.idl
-```
-
-To run the backend visitor directly on one IDL file:
+Run the generator on an IDL file:
 
 ```sh
 bundle exec ruby script/idl2xmi.rb examples/basic.idl output.xmi
 ```
-
-Use RIDL's `-o` option to choose an output file. Without it, XMI is written to
-standard output.
 
 ## Test
 

@@ -2,4 +2,5 @@
 /Gemfile.lock
 /pkg/
 /vendor/
+/_ridl/
 *.xmi

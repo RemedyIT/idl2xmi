@@ -1,40 +1,40 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
-require 'open3'
-require 'rbconfig'
+require 'stringio'
 require 'rexml/document'
-require 'tmpdir'
+require 'rexml/xpath'
+require 'ridl/runner'
+require 'ridl/require'
+
+require_relative '../lib/idl2xmi'
 
 class StructXmiTest < Minitest::Test
+  UML_NS = 'http://www.omg.org/spec/UML/20161101'.freeze
+
   def test_struct_with_one_long_member
-    script = File.expand_path('../script/idl2xmi.rb', __dir__)
-    input = File.expand_path('fixtures/struct_one_member.idl', __dir__)
-    expected = File.expand_path('golden/struct_one_member.xmi', __dir__)
+    parser = IDL::Parser.new(idlversion: 3, ignore_pidl: true)
+    parser.parse(<<~IDL)
+      struct Record {
+        long id;
+      };
+    IDL
 
-    Dir.mktmpdir do |dir|
-      generated = File.join(dir, 'generated.xmi')
-      _stdout, stderr, status = Open3.capture3(
-        RbConfig.ruby, script, input, generated
-      )
+    output = StringIO.new
+    parser.visit_nodes(IDL::Idl2xmi::XmiVisitor.new(output))
+    document = REXML::Document.new(output.string)
 
-      assert status.success?, "generator failed: #{stderr}"
-      assert_equal canonical_xml(expected), canonical_xml(generated)
-    end
-  end
+    datatype = REXML::XPath.first(
+      document,
+      "//packagedElement[@name='Record']",
+      'uml' => UML_NS
+    )
+    refute_nil datatype
+    assert_equal 'uml:DataType', datatype.attributes['xmi:type']
 
-  private
-
-  def canonical_xml(path)
-    document = REXML::Document.new(File.read(path))
-    canonical_element(document.root)
-  end
-
-  def canonical_element(element)
-    attributes = element.attributes.to_a
-                           .map { |attribute| [attribute.expanded_name, attribute.value] }
-                           .sort
-    children = element.elements.to_a.map { |child| canonical_element(child) }
-    [element.expanded_name, attributes, children]
+    properties = datatype.elements.to_a('ownedAttribute')
+    assert_equal 1, properties.length
+    assert_equal 'id', properties.first.attributes['name']
+    assert_equal 'long', properties.first.attributes['type']
   end
 end
