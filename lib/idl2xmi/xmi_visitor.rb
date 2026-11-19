@@ -70,6 +70,10 @@ module IDL
         end
       end
 
+      def leave_struct(_node)
+        # Struct members are emitted from enter_struct; nothing to close here.
+      end
+
       def visit_enum(node)
         enumeration = element('packagedElement', 'uml:Enumeration', node.lm_name)
         current_container.add_element(enumeration)
