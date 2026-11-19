@@ -20,9 +20,7 @@
       <ownedAttribute xmi:type='uml:Property' xmi:id='idl2xmi-BasicTypes__value_base_value' name='value_base_value' type='ValueBase'/>
       <ownedAttribute xmi:type='uml:Property' xmi:id='idl2xmi-BasicTypes__fixed_value' name='fixed_value' type='fixed&lt;8,2&gt;'/>
       <ownedAttribute xmi:type='uml:Property' xmi:id='idl2xmi-BasicTypes__string_value' name='string_value' type='string'/>
-      <ownedAttribute xmi:type='uml:Property' xmi:id='idl2xmi-BasicTypes__bounded_string_value' name='bounded_string_value' type='string&lt;32&gt;'/>
       <ownedAttribute xmi:type='uml:Property' xmi:id='idl2xmi-BasicTypes__wstring_value' name='wstring_value' type='wstring'/>
-      <ownedAttribute xmi:type='uml:Property' xmi:id='idl2xmi-BasicTypes__bounded_wstring_value' name='bounded_wstring_value' type='wstring&lt;16&gt;'/>
     </packagedElement>
   </uml:Model>
 </xmi:XMI>
