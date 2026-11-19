@@ -674,7 +674,7 @@ module IDL
       def emit_forward_declarations
         @forward_declarations.each_value do |node, xmi_type|
           declaration = element('idl2xmi:forwardDeclaration', xmi_type, node)
-          @model.add_element(declaration)
+          current_container_for_enclosure(node).add_element(declaration)
         end
       end
 
