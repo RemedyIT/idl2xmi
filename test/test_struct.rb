@@ -15,6 +15,10 @@ class StructXmiTest < Minitest::Test
     assert_fixture_matches_golden('all_basic_types')
   end
 
+  def test_enum_with_three_values
+    assert_fixture_matches_golden('enum')
+  end
+
   private
 
   def assert_fixture_matches_golden(name)
