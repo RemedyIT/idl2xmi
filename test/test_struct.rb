@@ -1,40 +1,48 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
-require 'stringio'
+require 'open3'
+require 'rbconfig'
 require 'rexml/document'
-require 'rexml/xpath'
-require 'ridl/runner'
-require 'ridl/require'
-
-require_relative '../lib/idl2xmi'
+require 'tmpdir'
 
 class StructXmiTest < Minitest::Test
-  UML_NS = 'http://www.omg.org/spec/UML/20161101'.freeze
-
   def test_struct_with_one_long_member
-    parser = IDL::Parser.new(idlversion: 3, ignore_pidl: true)
-    parser.parse(<<~IDL)
-      struct Record {
-        long id;
-      };
-    IDL
+    assert_fixture_matches_golden('struct_one_member')
+  end
 
-    output = StringIO.new
-    parser.visit_nodes(IDL::Idl2xmi::XmiVisitor.new(output))
-    document = REXML::Document.new(output.string)
+  def test_struct_with_all_basic_types
+    assert_fixture_matches_golden('all_basic_types')
+  end
 
-    datatype = REXML::XPath.first(
-      document,
-      "//packagedElement[@name='Record']",
-      'uml' => UML_NS
-    )
-    refute_nil datatype
-    assert_equal 'uml:DataType', datatype.attributes['xmi:type']
+  private
 
-    properties = datatype.elements.to_a('ownedAttribute')
-    assert_equal 1, properties.length
-    assert_equal 'id', properties.first.attributes['name']
-    assert_equal 'long', properties.first.attributes['type']
+  def assert_fixture_matches_golden(name)
+    script = File.expand_path('../script/idl2xmi.rb', __dir__)
+    input = File.expand_path("fixtures/#{name}.idl", __dir__)
+    expected = File.expand_path("golden/#{name}.xmi", __dir__)
+
+    Dir.mktmpdir do |dir|
+      generated = File.join(dir, 'generated.xmi')
+      _stdout, stderr, status = Open3.capture3(
+        RbConfig.ruby, script, input, generated
+      )
+
+      assert status.success?, "generator failed: #{stderr}"
+      assert_equal canonical_xml(expected), canonical_xml(generated)
+    end
+  end
+
+  def canonical_xml(path)
+    document = REXML::Document.new(File.read(path))
+    canonical_element(document.root)
+  end
+
+  def canonical_element(element)
+    attributes = element.attributes.to_a
+                           .map { |attribute| [attribute.expanded_name, attribute.value] }
+                           .sort
+    children = element.elements.to_a.map { |child| canonical_element(child) }
+    [element.expanded_name, attributes, children]
   end
 end

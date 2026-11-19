@@ -38,9 +38,8 @@ not affect the comparison.
 ## Current mapping
 
 - IDL `struct` declarations become UML `DataType` classifiers.
-- Struct members become UML `Property` elements. The original IDL type name is
-  retained as a `type` attribute as a starting point for a proper classifier
-  reference mapping.
+- Struct members become UML `Property` elements. Basic IDL types are mapped to
+  their IDL spellings, including bounds for `string`, `wstring`, and `fixed`.
 - IDL enums become UML `Enumeration` classifiers. Each enumerator becomes a
   `EnumerationLiteral`; its RIDL ordinal is retained in the `idl2xmi:index`
   attribute.

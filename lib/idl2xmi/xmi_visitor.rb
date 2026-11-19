@@ -11,6 +11,8 @@ module IDL
         IDL::Type::Char => 'char',
         IDL::Type::WChar => 'wchar',
         IDL::Type::Octet => 'octet',
+        IDL::Type::TinyShort => 'int8',
+        IDL::Type::UTinyShort => 'uint8',
         IDL::Type::Short => 'short',
         IDL::Type::UShort => 'unsigned short',
         IDL::Type::Long => 'long',
@@ -20,6 +22,10 @@ module IDL
         IDL::Type::Float => 'float',
         IDL::Type::Double => 'double',
         IDL::Type::LongDouble => 'long double',
+        IDL::Type::Any => 'any',
+        IDL::Type::Object => 'Object',
+        IDL::Type::ValueBase => 'ValueBase',
+        IDL::Type::Native => 'native',
         IDL::Type::String => 'string',
         IDL::Type::WString => 'wstring'
       }.freeze
@@ -106,9 +112,17 @@ module IDL
       def idl_type_name(type)
         if IDL::Type::NodeType === type
           type.node.scoped_name.to_s
+        elsif IDL::Type::String === type || IDL::Type::WString === type
+          bounded_type_name(BASIC_TYPE_NAMES.fetch(type.class), type.size)
+        elsif IDL::Type::Fixed === type
+          type.digits ? "fixed<#{type.digits},#{type.scale}>" : 'fixed'
         else
           BASIC_TYPE_NAMES.fetch(type.class, type.typename.to_s)
         end
+      end
+
+      def bounded_type_name(name, bound)
+        bound ? "#{name}<#{bound}>" : name
       end
 
       def stable_id(name)

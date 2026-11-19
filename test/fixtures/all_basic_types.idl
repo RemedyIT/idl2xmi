@@ -1,0 +1,23 @@
+struct BasicTypes {
+  boolean boolean_value;
+  char char_value;
+  wchar wchar_value;
+  octet octet_value;
+  short short_value;
+  unsigned short unsigned_short_value;
+  long long_value;
+  unsigned long unsigned_long_value;
+  long long long_long_value;
+  unsigned long long unsigned_long_long_value;
+  float float_value;
+  double double_value;
+  long double long_double_value;
+  any any_value;
+  Object object_value;
+  ValueBase value_base_value;
+  fixed<8, 2> fixed_value;
+  string string_value;
+  string<32> bounded_string_value;
+  wstring wstring_value;
+  wstring<16> bounded_wstring_value;
+};
