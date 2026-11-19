@@ -7,7 +7,7 @@ module Modern {
     int8 tiny;
     uint16 small;
     StringMap lookup;
-    Label label;
+    Label label_value;
   };
 
   bitmask Permissions { read, write, execute };
