@@ -19,6 +19,10 @@ class StructXmiTest < Minitest::Test
     assert_fixture_matches_golden('enum')
   end
 
+  def test_module_containing_union
+    assert_fixture_matches_golden('module_union')
+  end
+
   private
 
   def assert_fixture_matches_golden(name)
