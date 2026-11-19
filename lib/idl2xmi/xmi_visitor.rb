@@ -515,6 +515,8 @@ module IDL
           visit_attribute(node)
         when IDL::AST::Port
           visit_port(node)
+        when IDL::AST::Porttype
+          visit_porttype(node)
         when IDL::AST::Initializer
           visit_factory(node)
         when IDL::AST::Finder
