@@ -17,7 +17,5 @@ struct BasicTypes {
   ValueBase value_base_value;
   fixed<8, 2> fixed_value;
   string string_value;
-  string<32> bounded_string_value;
   wstring wstring_value;
-  wstring<16> bounded_wstring_value;
 };
