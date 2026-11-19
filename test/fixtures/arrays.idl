@@ -1,7 +1,7 @@
 typedef long LongArray[3];
-typedef char Matrix[2][4];
+typedef char CharMatrix[2][4];
 
 struct Samples {
   LongArray values;
-  Matrix matrix;
+  CharMatrix matrix;
 };
