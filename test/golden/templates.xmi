@@ -1,0 +1,23 @@
+<xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20131001' xmlns:uml='http://www.omg.org/spec/UML/20161101' xmlns:idl2xmi='https://github.com/jwillemsen/idl2xmi/profile' xmi:version='2.5.1'>
+  <uml:Model xmi:id='idl2xmi-model' name='IDL model'>
+    <packagedElement xmi:type='uml:Package' xmi:id='idl2xmi-LongContainer' name='LongContainer' idl2xmi:template='idl2xmi-Container' idl2xmi:arguments='int32_t'>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-LongContainer__Items' name='Items' idl2xmi:kind='typedef' idl2xmi:aliasedType='std::vector&lt;int32_t&gt;'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-LongContainer__Box' name='Box'>
+        <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-LongContainer__Box__value' name='value'/>
+      </packagedElement>
+      <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-LongContainer__Ports' name='Ports' idl2xmi:kind='porttype'>
+        <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-LongContainer__Ports__version' name='version' isReadOnly='false'/>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type='uml:Package' xmi:id='idl2xmi-Container' name='Container' idl2xmi:kind='templateModule'>
+      <idl2xmi:templateParameter xmi:id='idl2xmi-Container__T' name='T' type='typename'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Container__Items' name='Items' idl2xmi:kind='typedef' idl2xmi:aliasedType='std::vector&lt;::Container::T&gt;'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Container__Box' name='Box'>
+        <ownedAttribute xmi:type='uml:Property' type='::Container::T' xmi:id='idl2xmi-Container__Box__value' name='value'/>
+      </packagedElement>
+      <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-Container__Ports' name='Ports' idl2xmi:kind='porttype'>
+        <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-Container__Ports__version' name='version' isReadOnly='false'/>
+      </packagedElement>
+    </packagedElement>
+  </uml:Model>
+</xmi:XMI>
