@@ -23,6 +23,18 @@ class StructXmiTest < Minitest::Test
     assert_fixture_matches_golden('module_union')
   end
 
+  def test_module_constants
+    assert_fixture_matches_golden('constants')
+  end
+
+  def test_interface_members_and_inheritance
+    assert_fixture_matches_golden('interface')
+  end
+
+  def test_fixed_size_arrays
+    assert_fixture_matches_golden('arrays')
+  end
+
   private
 
   def assert_fixture_matches_golden(name)
