@@ -1,0 +1,18 @@
+module Modern {
+  typedef map<string, sequence<int32, 3>, 8> StringMap;
+
+  struct Values {
+    int8 tiny;
+    uint16 small;
+    StringMap lookup;
+    string<32> label;
+  };
+
+  bitmask Permissions { read, write, execute };
+
+  bitset Header {
+    bitfield<1> present;
+    bitfield<7, octet> flags;
+    bitfield<16, int16> identifier;
+  };
+};
