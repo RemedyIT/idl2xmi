@@ -3,5 +3,5 @@ module Forward {
   struct Incomplete;
   union Choice;
   valuetype Value;
-  component Component;
+  component WorkerComponent;
 };
