@@ -1,0 +1,4 @@
+module Constants {
+  const long ANSWER = 42;
+  const string GREETING = "hello";
+};
