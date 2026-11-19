@@ -1,0 +1,8 @@
+exception Failure {
+  string reason;
+};
+
+interface Service {
+  void read(in long key, out string value) raises (Failure);
+  attribute long count getraises (Failure) setraises (Failure);
+};
