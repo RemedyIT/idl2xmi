@@ -27,6 +27,15 @@ bundle exec ridlc :idl2xmi examples/basic.idl
 Use RIDL's `-o` option to choose an output file. Without it, XMI is written to
 standard output.
 
+## Test
+
+```sh
+bundle exec rake test
+```
+
+The first test parses a small IDL struct with RIDL, passes its AST through the
+backend visitor, then checks the generated UML datatype and its single member.
+
 ## Current mapping
 
 - IDL `struct` declarations become UML `DataType` classifiers.

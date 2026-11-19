@@ -6,6 +6,23 @@ module IDL
       XMI_NS = 'http://www.omg.org/spec/XMI/20131001'.freeze
       UML_NS = 'http://www.omg.org/spec/UML/20161101'.freeze
       IDL2XMI_NS = 'https://github.com/jwillemsen/idl2xmi/profile'.freeze
+      BASIC_TYPE_NAMES = {
+        IDL::Type::Boolean => 'boolean',
+        IDL::Type::Char => 'char',
+        IDL::Type::WChar => 'wchar',
+        IDL::Type::Octet => 'octet',
+        IDL::Type::Short => 'short',
+        IDL::Type::UShort => 'unsigned short',
+        IDL::Type::Long => 'long',
+        IDL::Type::ULong => 'unsigned long',
+        IDL::Type::LongLong => 'long long',
+        IDL::Type::ULongLong => 'unsigned long long',
+        IDL::Type::Float => 'float',
+        IDL::Type::Double => 'double',
+        IDL::Type::LongDouble => 'long double',
+        IDL::Type::String => 'string',
+        IDL::Type::WString => 'wstring'
+      }.freeze
 
       def initialize(output)
         @output = output
@@ -86,7 +103,7 @@ module IDL
         if IDL::Type::NodeType === type
           type.node.scoped_name.to_s
         else
-          type.typename.to_s
+          BASIC_TYPE_NAMES.fetch(type.class, type.typename.to_s)
         end
       end
 
