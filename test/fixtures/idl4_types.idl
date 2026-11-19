@@ -6,7 +6,7 @@ module Modern {
   typedef map<Label, Ints, 8> StringMap;
   typedef map<long, long> IntegerMap;
 
-  @marker
+  @marker @range(min=0, max=100)
   struct Values {
     int8 tiny;
     uint8 unsigned_tiny;
