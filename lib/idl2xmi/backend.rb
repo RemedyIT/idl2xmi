@@ -6,6 +6,14 @@ module IDL
     COPYRIGHT = 'Copyright (c) 2026'.freeze
     VERSION = { major: 0, minor: 1, release: 0 }.freeze
 
+    module ScannerMixin
+      def chk_identifier(identifier)
+        identifier
+      end
+    end
+
+    Scanner.include(ScannerMixin)
+
     Backend.configure('idl2xmi', File.expand_path('../ridlbe/idl2xmi', __dir__),
                       TITLE, COPYRIGHT, VERSION) do |becfg|
       becfg.on_process_input do |parser, options|
