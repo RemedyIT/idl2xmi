@@ -28,6 +28,15 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
 
+      - name: Generate XMI golden output for review
+        run: |
+          bundle exec ruby script/idl2xmi.rb test/fixtures/struct_one_member.idl /tmp/struct_one_member.xmi
+          bundle exec ruby script/idl2xmi.rb test/fixtures/all_basic_types.idl /tmp/all_basic_types.xmi
+          cat /tmp/struct_one_member.xmi
+          cat /tmp/all_basic_types.xmi
+        env:
+          RUBYLIB: ${{ github.workspace }}/_ridl/lib
+
       - name: Run tests
         run: bundle exec rake test
         env:
