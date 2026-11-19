@@ -1,0 +1,7 @@
+module Example {
+  union Choice switch (long) {
+    case 0: string text;
+    case 1: long number;
+    default: boolean flag;
+  };
+};
