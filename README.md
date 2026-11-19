@@ -24,6 +24,12 @@ export RIDL_BE_PATH="$PWD/lib"
 bundle exec ridlc :idl2xmi examples/basic.idl
 ```
 
+To run the backend visitor directly on one IDL file:
+
+```sh
+bundle exec ruby script/idl2xmi.rb examples/basic.idl output.xmi
+```
+
 Use RIDL's `-o` option to choose an output file. Without it, XMI is written to
 standard output.
 
@@ -33,8 +39,9 @@ standard output.
 bundle exec rake test
 ```
 
-The first test parses a small IDL struct with RIDL, passes its AST through the
-backend visitor, then checks the generated UML datatype and its single member.
+The golden test runs the script on a small IDL fixture and compares the parsed
+XMI tree with a committed expected file. Whitespace and XML attribute order do
+not affect the comparison.
 
 ## Current mapping
 
