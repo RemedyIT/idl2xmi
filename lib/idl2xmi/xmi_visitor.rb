@@ -101,6 +101,24 @@ module IDL
         # Struct members are emitted from enter_struct; nothing to close here.
       end
 
+      def enter_exception(node)
+        exception = element('packagedElement', 'uml:DataType', node)
+        exception.add_attribute('idl2xmi:kind', 'exception')
+        current_container.add_element(exception)
+        node.members.each do |member|
+          property = REXML::Element.new('ownedAttribute')
+          property.add_attribute('xmi:type', 'uml:Property')
+          property.add_attribute('xmi:id', stable_id(member.scoped_name))
+          property.add_attribute('name', member.lm_name.to_s)
+          property.add_attribute('type', idl_type_name(member.idltype))
+          exception.add_element(property)
+        end
+      end
+
+      def leave_exception(_node)
+        # Exception members are emitted from enter_exception.
+      end
+
       def visit_enum(node)
         enumeration = element('packagedElement', 'uml:Enumeration', node)
         current_container.add_element(enumeration)
@@ -165,7 +183,7 @@ module IDL
         operation.add_attribute('name', node.lm_name.to_s)
         operation.add_attribute('idl2xmi:oneway', 'true') if node.oneway
         unless node.raises.empty?
-          operation.add_attribute('idl2xmi:raises', node.raises.map { |exception| idl_type_name(exception) }.join(','))
+          operation.add_attribute('raisedException', node.raises.map { |exception| type_id(exception) }.join(' '))
         end
         unless IDL::Type::Void === node.idltype
           result = REXML::Element.new('ownedParameter')
@@ -195,6 +213,12 @@ module IDL
         attribute.add_attribute('name', node.lm_name.to_s)
         attribute.add_attribute('type', idl_type_name(node.idltype))
         attribute.add_attribute('isReadOnly', node.readonly.to_s)
+        unless node.get_raises.empty?
+          attribute.add_attribute('idl2xmi:getRaises', node.get_raises.map { |exception| type_id(exception) }.join(' '))
+        end
+        unless node.set_raises.empty?
+          attribute.add_attribute('idl2xmi:setRaises', node.set_raises.map { |exception| type_id(exception) }.join(' '))
+        end
         current_container.add_element(attribute)
       end
 
@@ -262,6 +286,10 @@ module IDL
           IDL::AST::Parameter::OUT => 'out',
           IDL::AST::Parameter::INOUT => 'inout'
         }.fetch(direction)
+      end
+
+      def type_id(type)
+        stable_id(type.node.scoped_name)
       end
 
       def stable_id(name)
