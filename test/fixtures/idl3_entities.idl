@@ -1,0 +1,37 @@
+interface Control {
+  void start(in long id);
+};
+
+exception Failure {
+  string reason;
+};
+
+valuetype Record {
+  public long id;
+  private string<32> label;
+  factory create(in long id) raises (Failure);
+  long value();
+};
+
+valuetype RecordBox Record;
+
+eventtype Changed {
+  public long value;
+};
+
+porttype ControlPorts {
+  provides Control control;
+  uses multiple Control observers;
+  attribute long count;
+};
+
+component Worker supports Control {
+  provides Control control;
+  uses multiple Control peers;
+  attribute long count;
+};
+
+home WorkerHome manages Worker {
+  factory create(in long id);
+  finder find(in long id) raises (Failure);
+};
