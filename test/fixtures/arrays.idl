@@ -1,0 +1,4 @@
+struct Samples {
+  long values[3];
+  char matrix[2][4];
+};
