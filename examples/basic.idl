@@ -1,0 +1,12 @@
+module Example {
+  struct Point {
+    long x;
+    long y;
+  };
+
+  enum Color {
+    red,
+    green,
+    blue
+  };
+};
