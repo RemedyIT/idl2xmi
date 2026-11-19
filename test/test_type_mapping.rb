@@ -34,7 +34,9 @@ class BasicTypeMappingTest < Minitest::Test
       IDL::Type::WString.new => 'std::wstring',
       IDL::Type::WString.new(16) => 'TAOX11_IDL::bounded_wstring<16>',
       IDL::Type::Fixed.new(8, 2) => 'TAOX11_NAMESPACE::IDL::Fixed<8, 2>',
-      IDL::Type::Fixed.new => 'TAOX11_NAMESPACE::IDL::Fixed'
+      IDL::Type::Fixed.new => 'TAOX11_NAMESPACE::IDL::Fixed',
+      IDL::Type::Array.new(IDL::Type::Long.new, [3]) => 'std::array<int32_t, 3>',
+      IDL::Type::Array.new(IDL::Type::Long.new, [2, 4]) => 'std::array<std::array<int32_t, 4>, 2>'
     }
     visitor = IDL::Idl2xmi::XmiVisitor.new(StringIO.new)
 
