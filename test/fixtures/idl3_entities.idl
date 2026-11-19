@@ -13,7 +13,7 @@ valuetype Record {
   long value();
 };
 
-valuetype RecordBox Record;
+valuetype RecordBox long;
 
 eventtype Changed {
   public long value;
