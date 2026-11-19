@@ -3,6 +3,9 @@ module Container <typename T> {
   struct Box {
     T value;
   };
+  porttype Ports {
+    attribute long version;
+  };
 };
 
 module Container<long> LongContainer;
