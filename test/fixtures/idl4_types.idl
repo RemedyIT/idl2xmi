@@ -1,14 +1,25 @@
 module Modern {
   typedef string<32> Label;
+  typedef wstring<16> WideLabel;
   typedef sequence<int32, 3> Ints;
+  typedef sequence<long> Longs;
   typedef map<Label, Ints, 8> StringMap;
+  typedef map<long, long> IntegerMap;
 
   @marker
   struct Values {
     int8 tiny;
+    uint8 unsigned_tiny;
+    int16 signed_short;
     uint16 small;
+    int32 signed_long;
+    uint32 unsigned_long;
+    int64 signed_long_long;
+    uint64 unsigned_long_long;
     StringMap lookup;
+    IntegerMap unbounded_lookup;
     Label label_value;
+    WideLabel wide_label;
   };
 
   bitmask Permissions { read, write, execute };
@@ -17,5 +28,9 @@ module Modern {
     bitfield<1> present;
     bitfield<7, octet> flags;
     bitfield<16, int16> identifier;
+  };
+
+  bitset ExtendedHeader : Header {
+    bitfield<1> extension;
   };
 };
