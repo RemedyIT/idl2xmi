@@ -13,7 +13,7 @@ require 'ridl/require'
 require 'idl2xmi'
 
 input_path, output_path = ARGV
-parser = IDL::Parser.new(idlversion: 3, ignore_pidl: true)
+parser = IDL::Parser.new(idlversion: 4, ignore_pidl: true)
 parser.parse(File.read(input_path))
 
 output = output_path ? File.open(output_path, 'w') : $stdout
