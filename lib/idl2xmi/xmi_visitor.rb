@@ -211,11 +211,10 @@ module IDL
         reference = REXML::Element.new('idl2xmi:templateInstantiation')
         reference.add_attribute('xmi:id', stable_id(node.scoped_name))
         reference.add_attribute('name', node.lm_name.to_s)
-        template_type = node.respond_to?(:tpl_type) ? node.tpl_type : nil
-        template = template_type.respond_to?(:node) ? template_type.node : template_type
-        template_params = node.respond_to?(:tpl_params) ? node.tpl_params : []
+        template = node.respond_to?(:template) ? node.template : nil
+        template_params = node.respond_to?(:params) ? node.params : []
         reference.add_attribute('template', stable_id(template.scoped_name)) if template
-        reference.add_attribute('arguments', template_params.map { |param| param.respond_to?(:name) ? param.name.to_s : param.to_s }.join(','))
+        reference.add_attribute('arguments', template_params.map { |param| param.scoped_name }.join(','))
         apply_annotations(reference, node)
         current_container.add_element(reference)
       end
