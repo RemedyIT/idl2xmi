@@ -1,0 +1,7 @@
+module Forward {
+  interface Unresolved;
+  struct Incomplete;
+  union Choice;
+  valuetype Value;
+  component Component;
+};
