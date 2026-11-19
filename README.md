@@ -31,9 +31,11 @@ bundle exec ruby script/idl2xmi.rb examples/basic.idl output.xmi
 bundle exec rake test
 ```
 
-The golden test runs the script on a small IDL fixture and compares the parsed
-XMI tree with a committed expected file. Whitespace and XML attribute order do
-not affect the comparison.
+The golden test recursively finds IDL files under `test/fixtures` and compares
+each generated XMI tree with the corresponding file under `test/golden`, keeping
+the same relative path. Whitespace and XML attribute order do not affect the
+comparison. If a golden file is missing, the test prints the generated XMI so
+it can be committed as the expected output.
 
 Regenerate all committed golden files with the backend itself:
 
