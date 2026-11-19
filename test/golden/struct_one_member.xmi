@@ -1,7 +1,7 @@
 <xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20131001' xmlns:uml='http://www.omg.org/spec/UML/20161101' xmlns:idl2xmi='https://github.com/jwillemsen/idl2xmi/profile' xmi:version='2.5.1'>
   <uml:Model xmi:id='idl2xmi-model' name='IDL model'>
     <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Record' name='Record'>
-      <ownedAttribute xmi:type='uml:Property' type='long' xmi:id='idl2xmi-Record__id' name='id'/>
+      <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-Record__id' name='id'/>
     </packagedElement>
   </uml:Model>
 </xmi:XMI>
