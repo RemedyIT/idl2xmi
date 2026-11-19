@@ -1,55 +1,49 @@
 # frozen_string_literal: true
 
+require 'fileutils'
 require 'minitest/autorun'
 require 'open3'
 require 'rbconfig'
 require 'rexml/document'
 require 'tmpdir'
 
-class StructXmiTest < Minitest::Test
-  def test_struct_with_one_long_member
-    assert_fixture_matches_golden('struct_one_member')
-  end
+class GoldenXmiTest < Minitest::Test
+  def test_every_idl_fixture_matches_its_golden_file
+    fixtures_dir = File.expand_path('fixtures', __dir__)
+    golden_dir = File.expand_path('golden', __dir__)
+    fixtures = Dir[File.join(fixtures_dir, '**', '*.idl')].sort
+    refute_empty fixtures, 'no IDL fixtures found'
 
-  def test_struct_with_all_basic_types
-    assert_fixture_matches_golden('all_basic_types')
-  end
+    missing_goldens = []
+    fixtures.each do |input|
+      relative_path = input.delete_prefix(fixtures_dir + File::SEPARATOR)
+      expected = File.join(golden_dir, relative_path.sub(/\.idl\z/, '.xmi'))
+      assert_fixture_matches_golden(input, expected, relative_path, missing_goldens)
+    end
 
-  def test_enum_with_three_values
-    assert_fixture_matches_golden('enum')
-  end
-
-  def test_module_containing_union
-    assert_fixture_matches_golden('module_union')
-  end
-
-  def test_module_constants
-    assert_fixture_matches_golden('constants')
-  end
-
-  def test_interface_members_and_inheritance
-    assert_fixture_matches_golden('interface')
-  end
-
-  def test_fixed_size_arrays
-    assert_fixture_matches_golden('arrays')
+    assert_empty missing_goldens, "missing golden files: #{missing_goldens.join(', ')}"
   end
 
   private
 
-  def assert_fixture_matches_golden(name)
+  def assert_fixture_matches_golden(input, expected, relative_path, missing_goldens)
     script = File.expand_path('../script/idl2xmi.rb', __dir__)
-    input = File.expand_path("fixtures/#{name}.idl", __dir__)
-    expected = File.expand_path("golden/#{name}.xmi", __dir__)
 
     Dir.mktmpdir do |dir|
-      generated = File.join(dir, 'generated.xmi')
+      generated = File.join(dir, relative_path.sub(/\.idl\z/, '.xmi'))
+      FileUtils.mkdir_p(File.dirname(generated))
       _stdout, stderr, status = Open3.capture3(
         RbConfig.ruby, script, input, generated
       )
 
-      assert status.success?, "generator failed: #{stderr}"
-      assert_equal canonical_xml(expected), canonical_xml(generated)
+      assert status.success?, "generator failed for #{relative_path}: #{stderr}"
+      unless File.file?(expected)
+        missing_goldens << expected
+        warn "Missing golden file: #{expected}\nGenerated XMI:\n#{File.read(generated)}"
+        return
+      end
+
+      assert_equal canonical_xml(expected), canonical_xml(generated), relative_path
     end
   end
 
