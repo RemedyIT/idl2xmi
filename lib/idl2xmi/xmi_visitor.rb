@@ -7,6 +7,7 @@ module IDL
       UML_NS = 'http://www.omg.org/spec/UML/20161101'.freeze
       IDL2XMI_NS = 'https://github.com/jwillemsen/idl2xmi/profile'.freeze
       CXX_TYPE_NAMES = {
+        IDL::Type::Void => 'void',
         IDL::Type::Boolean => 'bool',
         IDL::Type::Char => 'char',
         IDL::Type::WChar => 'wchar_t',
@@ -60,6 +61,26 @@ module IDL
       end
 
       def leave_module(_node)
+        @containers.pop
+      end
+
+      def enter_interface(node)
+        interface = element('packagedElement', 'uml:Interface', node)
+        interface.add_attribute('isAbstract', node.is_abstract?.to_s)
+        interface.add_attribute('idl2xmi:local', node.is_local?.to_s)
+        interface.add_attribute('idl2xmi:pseudo', node.is_pseudo?.to_s)
+        current_container.add_element(interface)
+        node.bases.each do |base|
+          generalization = REXML::Element.new('generalization')
+          generalization.add_attribute('xmi:type', 'uml:Generalization')
+          generalization.add_attribute('xmi:id', stable_id("#{node.scoped_name}::#{base.scoped_name}"))
+          generalization.add_attribute('general', stable_id(base.scoped_name))
+          interface.add_element(generalization)
+        end
+        @containers.push(interface)
+      end
+
+      def leave_interface(_node)
         @containers.pop
       end
 
@@ -118,6 +139,58 @@ module IDL
         # Union arms are emitted from enter_union.
       end
 
+      def visit_const(node)
+        constant = REXML::Element.new('ownedAttribute')
+        constant.add_attribute('xmi:type', 'uml:Property')
+        constant.add_attribute('xmi:id', stable_id(node.scoped_name))
+        constant.add_attribute('name', node.lm_name.to_s)
+        constant.add_attribute('type', idl_type_name(node.idltype))
+        constant.add_attribute('isStatic', 'true')
+        constant.add_attribute('isReadOnly', 'true')
+        constant.add_attribute('default', node.value.to_s) unless node.value.nil?
+        current_container.add_element(constant)
+      end
+
+      def visit_operation(node)
+        operation = REXML::Element.new('ownedOperation')
+        operation.add_attribute('xmi:type', 'uml:Operation')
+        operation.add_attribute('xmi:id', stable_id(node.scoped_name))
+        operation.add_attribute('name', node.lm_name.to_s)
+        operation.add_attribute('idl2xmi:oneway', 'true') if node.oneway
+        unless node.raises.empty?
+          operation.add_attribute('idl2xmi:raises', node.raises.map { |exception| idl_type_name(exception) }.join(','))
+        end
+        unless IDL::Type::Void === node.idltype
+          result = REXML::Element.new('ownedParameter')
+          result.add_attribute('xmi:type', 'uml:Parameter')
+          result.add_attribute('xmi:id', stable_id("#{node.scoped_name}::return"))
+          result.add_attribute('name', 'return')
+          result.add_attribute('type', idl_type_name(node.idltype))
+          result.add_attribute('direction', 'return')
+          operation.add_element(result)
+        end
+        node.params.each do |parameter|
+          argument = REXML::Element.new('ownedParameter')
+          argument.add_attribute('xmi:type', 'uml:Parameter')
+          argument.add_attribute('xmi:id', stable_id(parameter.scoped_name))
+          argument.add_attribute('name', parameter.lm_name.to_s)
+          argument.add_attribute('type', idl_type_name(parameter.idltype))
+          argument.add_attribute('direction', parameter_direction(parameter.attribute))
+          operation.add_element(argument)
+        end
+        current_container.add_element(operation)
+      end
+
+      def visit_attribute(node)
+        attribute = REXML::Element.new('ownedAttribute')
+        attribute.add_attribute('xmi:type', 'uml:Property')
+        attribute.add_attribute('xmi:id', stable_id(node.scoped_name))
+        attribute.add_attribute('name', node.lm_name.to_s)
+        attribute.add_attribute('type', idl_type_name(node.idltype))
+        attribute.add_attribute('isReadOnly', node.readonly.to_s)
+        current_container.add_element(attribute)
+      end
+
       private
 
       def current_container
@@ -137,6 +210,17 @@ module IDL
           type.cxx_type
         elsif IDL::Type::NodeType === type
           "::#{type.node.scoped_name}"
+        elsif IDL::Type::Array === type
+          type.sizes.reverse.inject(idl_type_name(type.basetype)) do |element_type, size|
+            dimension = if size.respond_to?(:node)
+                          size.node.value
+                        elsif size.respond_to?(:value)
+                          size.value
+                        else
+                          size
+                        end
+            "std::array<#{element_type}, #{dimension}>"
+          end
         elsif IDL::Type::String === type || IDL::Type::WString === type
           bounded_type_name(type.class == IDL::Type::String ? 'TAOX11_IDL::bounded_string' : 'TAOX11_IDL::bounded_wstring', type.size)
         elsif IDL::Type::Fixed === type
@@ -163,6 +247,14 @@ module IDL
         return 'default' if label == :default
 
         label.respond_to?(:value) ? label.value.to_s : label.to_s
+      end
+
+      def parameter_direction(direction)
+        {
+          IDL::AST::Parameter::IN => 'in',
+          IDL::AST::Parameter::OUT => 'out',
+          IDL::AST::Parameter::INOUT => 'inout'
+        }.fetch(direction)
       end
 
       def stable_id(name)
