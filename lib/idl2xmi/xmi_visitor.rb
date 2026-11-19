@@ -151,6 +151,13 @@ module IDL
         current_container.add_element(constant)
       end
 
+      def visit_typedef(node)
+        alias_type = element('packagedElement', 'uml:DataType', node)
+        alias_type.add_attribute('idl2xmi:kind', 'typedef')
+        alias_type.add_attribute('idl2xmi:aliasedType', idl_type_name(node.idltype))
+        current_container.add_element(alias_type)
+      end
+
       def visit_operation(node)
         operation = REXML::Element.new('ownedOperation')
         operation.add_attribute('xmi:type', 'uml:Operation')
