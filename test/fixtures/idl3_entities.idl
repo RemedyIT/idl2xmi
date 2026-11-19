@@ -2,11 +2,15 @@ interface Control {
   void start(in long id);
 };
 
+valuetype BaseRecord {
+  public long key;
+};
+
 exception Failure {
   string reason;
 };
 
-valuetype Record {
+valuetype Record : truncatable BaseRecord supports Control {
   public long id;
   private long label;
   factory create(in long id) raises (Failure);
@@ -28,10 +32,26 @@ porttype ControlPorts {
 component Worker supports Control {
   provides Control endpoint;
   uses multiple Control peers;
+  emits Changed event_source;
+  publishes Changed event_stream;
+  consumes Changed event_sink;
+  port ControlPorts port_group;
+  mirrorport ControlPorts mirrored_port_group;
   attribute long count;
 };
 
-home WorkerHome manages Worker {
+typedef long WorkerId;
+
+home WorkerHome manages Worker primarykey WorkerId {
   factory create(in long id);
   finder find(in long id) raises (Failure);
+};
+
+connector BaseConnector {};
+
+connector LoggingConnector : BaseConnector {
+  provides Control facet;
+  uses multiple Control subscribers;
+  port ControlPorts port_group;
+  mirrorport ControlPorts mirrored_port_group;
 };
