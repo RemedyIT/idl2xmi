@@ -6,28 +6,28 @@ module IDL
       XMI_NS = 'http://www.omg.org/spec/XMI/20131001'.freeze
       UML_NS = 'http://www.omg.org/spec/UML/20161101'.freeze
       IDL2XMI_NS = 'https://github.com/jwillemsen/idl2xmi/profile'.freeze
-      BASIC_TYPE_NAMES = {
-        IDL::Type::Boolean => 'boolean',
+      CXX_TYPE_NAMES = {
+        IDL::Type::Boolean => 'bool',
         IDL::Type::Char => 'char',
-        IDL::Type::WChar => 'wchar',
-        IDL::Type::Octet => 'octet',
-        IDL::Type::TinyShort => 'int8',
-        IDL::Type::UTinyShort => 'uint8',
-        IDL::Type::Short => 'short',
-        IDL::Type::UShort => 'unsigned short',
-        IDL::Type::Long => 'long',
-        IDL::Type::ULong => 'unsigned long',
-        IDL::Type::LongLong => 'long long',
-        IDL::Type::ULongLong => 'unsigned long long',
+        IDL::Type::WChar => 'wchar_t',
+        IDL::Type::Octet => 'uint8_t',
+        IDL::Type::TinyShort => 'int8_t',
+        IDL::Type::UTinyShort => 'uint8_t',
+        IDL::Type::Short => 'int16_t',
+        IDL::Type::UShort => 'uint16_t',
+        IDL::Type::Long => 'int32_t',
+        IDL::Type::ULong => 'uint32_t',
+        IDL::Type::LongLong => 'int64_t',
+        IDL::Type::ULongLong => 'uint64_t',
         IDL::Type::Float => 'float',
         IDL::Type::Double => 'double',
         IDL::Type::LongDouble => 'long double',
-        IDL::Type::Any => 'any',
-        IDL::Type::Object => 'Object',
-        IDL::Type::ValueBase => 'ValueBase',
-        IDL::Type::Native => 'native',
-        IDL::Type::String => 'string',
-        IDL::Type::WString => 'wstring'
+        IDL::Type::Any => 'TAOX11_NAMESPACE::CORBA::Any',
+        IDL::Type::Object => 'TAOX11_NAMESPACE::CORBA::Object',
+        IDL::Type::ValueBase => 'TAOX11_NAMESPACE::CORBA::ValueBase',
+        IDL::Type::Native => 'void*',
+        IDL::Type::String => 'std::string',
+        IDL::Type::WString => 'std::wstring'
       }.freeze
 
       def initialize(output)
@@ -54,7 +54,7 @@ module IDL
       end
 
       def enter_module(node)
-        package = element('packagedElement', 'uml:Package', node.lm_name)
+        package = element('packagedElement', 'uml:Package', node)
         current_container.add_element(package)
         @containers.push(package)
       end
@@ -64,7 +64,7 @@ module IDL
       end
 
       def enter_struct(node)
-        datatype = element('packagedElement', 'uml:DataType', node.lm_name)
+        datatype = element('packagedElement', 'uml:DataType', node)
         current_container.add_element(datatype)
         node.members.each do |member|
           property = REXML::Element.new('ownedAttribute')
@@ -81,7 +81,7 @@ module IDL
       end
 
       def visit_enum(node)
-        enumeration = element('packagedElement', 'uml:Enumeration', node.lm_name)
+        enumeration = element('packagedElement', 'uml:Enumeration', node)
         current_container.add_element(enumeration)
         @enum_stack.push(enumeration)
       end
@@ -95,34 +95,74 @@ module IDL
         @enum_stack.last&.add_element(literal)
       end
 
+      def enter_union(node)
+        union = element('packagedElement', 'uml:DataType', node)
+        union.add_attribute('idl2xmi:kind', 'union')
+        union.add_attribute('idl2xmi:discriminatorType', idl_type_name(node.switchtype))
+        current_container.add_element(union)
+
+        # RIDL's AST walk intentionally skips union arms, so emit these members
+        # while visiting the union node itself.
+        node.members.each do |member|
+          property = REXML::Element.new('ownedAttribute')
+          property.add_attribute('xmi:type', 'uml:Property')
+          property.add_attribute('xmi:id', stable_id(member.scoped_name))
+          property.add_attribute('name', member.lm_name.to_s)
+          property.add_attribute('type', idl_type_name(member.idltype))
+          property.add_attribute('idl2xmi:labels', member.labels.map { |label| union_label(label) }.join(','))
+          union.add_element(property)
+        end
+      end
+
+      def leave_union(_node)
+        # Union arms are emitted from enter_union.
+      end
+
       private
 
       def current_container
         @containers.last
       end
 
-      def element(tag, xmi_type, name)
+      def element(tag, xmi_type, node)
         result = REXML::Element.new(tag)
         result.add_attribute('xmi:type', xmi_type)
-        result.add_attribute('xmi:id', stable_id(name))
-        result.add_attribute('name', name.to_s)
+        result.add_attribute('xmi:id', stable_id(node.scoped_name))
+        result.add_attribute('name', node.lm_name.to_s)
         result
       end
 
       def idl_type_name(type)
-        if IDL::Type::NodeType === type
-          type.node.scoped_name.to_s
+        if type.respond_to?(:cxx_type)
+          type.cxx_type
+        elsif IDL::Type::NodeType === type
+          "::#{type.node.scoped_name}"
         elsif IDL::Type::String === type || IDL::Type::WString === type
-          bounded_type_name(BASIC_TYPE_NAMES.fetch(type.class), type.size)
+          bounded_type_name(type.class == IDL::Type::String ? 'TAOX11_IDL::bounded_string' : 'TAOX11_IDL::bounded_wstring', type.size)
         elsif IDL::Type::Fixed === type
-          type.digits ? "fixed<#{type.digits},#{type.scale}>" : 'fixed'
+          type.digits ? "TAOX11_NAMESPACE::IDL::Fixed<#{type.digits}, #{type.scale}>" : 'TAOX11_NAMESPACE::IDL::Fixed'
         else
-          BASIC_TYPE_NAMES.fetch(type.class, type.typename.to_s)
+          CXX_TYPE_NAMES.fetch(type.class, type.typename.to_s)
         end
       end
 
       def bounded_type_name(name, bound)
-        bound ? "#{name}<#{bound}>" : name
+        type_name = if name == 'TAOX11_IDL::bounded_string' && bound.nil?
+                      'std::string'
+                    elsif name == 'TAOX11_IDL::bounded_wstring' && bound.nil?
+                      'std::wstring'
+                    elsif bound
+                      "#{name}<#{bound}>"
+                    else
+                      name
+                    end
+        type_name
+      end
+
+      def union_label(label)
+        return 'default' if label == :default
+
+        label.respond_to?(:value) ? label.value.to_s : label.to_s
       end
 
       def stable_id(name)
