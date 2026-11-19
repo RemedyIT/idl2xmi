@@ -1,0 +1,11 @@
+<xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20131001' xmlns:uml='http://www.omg.org/spec/UML/20161101' xmlns:idl2xmi='https://github.com/jwillemsen/idl2xmi/profile' xmi:version='2.5.1'>
+  <uml:Model xmi:id='idl2xmi-model' name='IDL model'>
+    <packagedElement xmi:type='uml:Package' xmi:id='idl2xmi-Forward' name='Forward'>
+      <idl2xmi:forwardDeclaration xmi:type='uml:Interface' xmi:id='idl2xmi-Forward__Unresolved' name='Unresolved'/>
+      <idl2xmi:forwardDeclaration xmi:type='uml:DataType' xmi:id='idl2xmi-Forward__Incomplete' name='Incomplete'/>
+      <idl2xmi:forwardDeclaration xmi:type='uml:DataType' xmi:id='idl2xmi-Forward__Choice' name='Choice'/>
+      <idl2xmi:forwardDeclaration xmi:type='uml:Class' xmi:id='idl2xmi-Forward__Value' name='Value'/>
+      <idl2xmi:forwardDeclaration xmi:type='uml:Component' xmi:id='idl2xmi-Forward__WorkerComponent' name='WorkerComponent'/>
+    </packagedElement>
+  </uml:Model>
+</xmi:XMI>
