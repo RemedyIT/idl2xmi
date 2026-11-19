@@ -1,11 +1,13 @@
 module Modern {
-  typedef map<string, sequence<int32, 3>, 8> StringMap;
+  typedef string<32> Label;
+  typedef sequence<int32, 3> Ints;
+  typedef map<Label, Ints, 8> StringMap;
 
   struct Values {
     int8 tiny;
     uint16 small;
     StringMap lookup;
-    string<32> label;
+    Label label;
   };
 
   bitmask Permissions { read, write, execute };
