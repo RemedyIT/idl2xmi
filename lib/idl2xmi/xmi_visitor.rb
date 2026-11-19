@@ -45,17 +45,24 @@ module IDL
         @xmi.add_element(@model)
         @document.add_element(@xmi)
         @containers = [@model]
-        @enum_stack = []
+        @elements_by_name = {}
+        @forward_declarations = {}
       end
 
       def visit_nodes(parser)
         parser.walk_nodes(self)
+        emit_deferred_nodes(parser.root) if parser.respond_to?(:root) && parser.root
+        emit_forward_declarations
         @document.write(@output, 2)
         @output.write("\n")
       end
 
       def enter_module(node)
         package = element('packagedElement', 'uml:Package', node)
+        if node.respond_to?(:is_templated?) && node.is_templated?
+          package.add_attribute('idl2xmi:template', stable_id(node.template.scoped_name))
+          package.add_attribute('idl2xmi:arguments', node.template_params.map { |param| idl_type_name(param) }.join(','))
+        end
         current_container.add_element(package)
         @containers.push(package)
       end
@@ -64,19 +71,21 @@ module IDL
         @containers.pop
       end
 
+      def visit_include(node)
+        include_element = REXML::Element.new('idl2xmi:include')
+        include_element.add_attribute('xmi:id', stable_id("include::#{node.filename}"))
+        include_element.add_attribute('filename', node.filename.to_s)
+        current_container.add_element(include_element)
+      end
+
       def enter_interface(node)
+        @forward_declarations.delete(node.scoped_name)
         interface = element('packagedElement', 'uml:Interface', node)
         interface.add_attribute('isAbstract', node.is_abstract?.to_s)
         interface.add_attribute('idl2xmi:local', node.is_local?.to_s)
         interface.add_attribute('idl2xmi:pseudo', node.is_pseudo?.to_s)
         current_container.add_element(interface)
-        node.bases.each do |base|
-          generalization = REXML::Element.new('generalization')
-          generalization.add_attribute('xmi:type', 'uml:Generalization')
-          generalization.add_attribute('xmi:id', stable_id("#{node.scoped_name}::#{base.scoped_name}"))
-          generalization.add_attribute('general', stable_id(base.scoped_name))
-          interface.add_element(generalization)
-        end
+        add_generalizations(interface, node, node.bases)
         @containers.push(interface)
       end
 
@@ -84,45 +93,167 @@ module IDL
         @containers.pop
       end
 
+      def declare_interface(node)
+        declare_classifier(node, 'uml:Interface')
+      end
+
+      def enter_component(node)
+        @forward_declarations.delete(node.scoped_name)
+        component = element('packagedElement', 'uml:Component', node)
+        component.add_attribute('idl2xmi:kind', 'component')
+        add_generalizations(component, node, [node.base].compact)
+        add_references(component, 'idl2xmi:supports', node.interfaces)
+        current_container.add_element(component)
+        @containers.push(component)
+      end
+
+      def leave_component(_node)
+        @containers.pop
+      end
+
+      def declare_component(node)
+        declare_classifier(node, 'uml:Component')
+      end
+
+      def enter_connector(node)
+        connector = element('packagedElement', 'uml:Component', node)
+        connector.add_attribute('idl2xmi:kind', 'connector')
+        add_generalizations(connector, node, [node.base].compact)
+        current_container.add_element(connector)
+        @containers.push(connector)
+      end
+
+      def leave_connector(_node)
+        @containers.pop
+      end
+
+      def enter_home(node)
+        home = element('packagedElement', 'uml:Class', node)
+        home.add_attribute('idl2xmi:kind', 'home')
+        home.add_attribute('idl2xmi:manages', type_id(node.component))
+        home.add_attribute('idl2xmi:primaryKey', type_id(node.primarykey)) if node.primarykey
+        add_generalizations(home, node, [node.base].compact)
+        add_references(home, 'idl2xmi:supports', node.interfaces)
+        current_container.add_element(home)
+        @containers.push(home)
+      end
+
+      def leave_home(_node)
+        @containers.pop
+      end
+
+      def visit_port(node)
+        port = REXML::Element.new('ownedPort')
+        port.add_attribute('xmi:type', 'uml:Port')
+        port.add_attribute('xmi:id', stable_id(node.scoped_name))
+        port.add_attribute('name', node.lm_name.to_s)
+        port.add_attribute('type', type_id(node.idltype))
+        port.add_attribute('idl2xmi:kind', node.porttype.to_s)
+        port.add_attribute('idl2xmi:multiple', node.multiple?.to_s)
+        apply_annotations(port, node)
+        current_container.add_element(port)
+      end
+
+      def visit_porttype(node)
+        porttype = element('packagedElement', 'uml:Interface', node)
+        porttype.add_attribute('idl2xmi:kind', 'porttype')
+        current_container.add_element(porttype)
+        @containers.push(porttype)
+        node.ports.each { |port| visit_port(port) }
+        node.attributes.each { |attribute| visit_attribute(attribute) }
+        @containers.pop
+      end
+
+      def visit_valuebox(node)
+        valuebox = element('packagedElement', 'uml:DataType', node)
+        valuebox.add_attribute('idl2xmi:kind', 'valuebox')
+        valuebox.add_attribute('idl2xmi:boxedType', idl_type_name(node.boxed_type))
+        current_container.add_element(valuebox)
+      end
+
+      def enter_valuetype(node)
+        @forward_declarations.delete(node.scoped_name)
+        valuetype = element('packagedElement', 'uml:Class', node)
+        valuetype.add_attribute('isAbstract', node.is_abstract?.to_s)
+        valuetype.add_attribute('idl2xmi:kind', node.is_a?(IDL::AST::Eventtype) ? 'eventtype' : 'valuetype')
+        valuetype.add_attribute('idl2xmi:custom', node.is_custom?.to_s)
+        valuetype.add_attribute('idl2xmi:truncatable', node.is_truncatable?.to_s)
+        add_generalizations(valuetype, node, node.bases)
+        add_references(valuetype, 'idl2xmi:supports', node.interfaces)
+        current_container.add_element(valuetype)
+        @containers.push(valuetype)
+
+        # RIDL deliberately omits these value members from walk_members.
+        node.state_members.each { |member| add_state_member(member) }
+        node.interface_members.each do |member|
+          member.is_a?(IDL::AST::Operation) ? visit_operation(member) : visit_attribute(member)
+        end
+        node.initializers.each { |initializer| visit_factory(initializer) }
+      end
+
+      def leave_valuetype(_node)
+        @containers.pop
+      end
+
+      def declare_valuetype(node)
+        declare_classifier(node, 'uml:Class')
+      end
+
+      def visit_factory(node)
+        visit_initializer(node, 'factory')
+      end
+
+      def visit_finder(node)
+        visit_initializer(node, 'finder')
+      end
+
+      def visit_template_reference(node)
+        reference = REXML::Element.new('idl2xmi:templateInstantiation')
+        reference.add_attribute('xmi:id', stable_id(node.scoped_name))
+        reference.add_attribute('name', node.lm_name.to_s)
+        template_type = node.respond_to?(:tpl_type) ? node.tpl_type : nil
+        template = template_type.respond_to?(:node) ? template_type.node : template_type
+        template_params = node.respond_to?(:tpl_params) ? node.tpl_params : []
+        reference.add_attribute('template', stable_id(template.scoped_name)) if template
+        reference.add_attribute('arguments', template_params.map { |param| param.respond_to?(:name) ? param.name.to_s : param.to_s }.join(','))
+        apply_annotations(reference, node)
+        current_container.add_element(reference)
+      end
+
       def enter_struct(node)
+        @forward_declarations.delete(node.scoped_name)
         datatype = element('packagedElement', 'uml:DataType', node)
         current_container.add_element(datatype)
         node.members.each do |member|
-          property = REXML::Element.new('ownedAttribute')
-          property.add_attribute('xmi:type', 'uml:Property')
-          property.add_attribute('xmi:id', stable_id("#{node.scoped_name}::#{member.lm_name}"))
-          property.add_attribute('name', member.lm_name.to_s)
-          property.add_attribute('type', idl_type_name(member.idltype))
-          datatype.add_element(property)
+          add_member(datatype, member)
         end
+        add_generalizations(datatype, node, [node.base].compact)
+        @containers.push(datatype)
       end
 
       def leave_struct(_node)
-        # Struct members are emitted from enter_struct; nothing to close here.
+        @containers.pop
+      end
+
+      def declare_struct(node)
+        declare_classifier(node, 'uml:DataType')
       end
 
       def enter_exception(node)
         exception = element('packagedElement', 'uml:DataType', node)
         exception.add_attribute('idl2xmi:kind', 'exception')
         current_container.add_element(exception)
-        node.members.each do |member|
-          property = REXML::Element.new('ownedAttribute')
-          property.add_attribute('xmi:type', 'uml:Property')
-          property.add_attribute('xmi:id', stable_id(member.scoped_name))
-          property.add_attribute('name', member.lm_name.to_s)
-          property.add_attribute('type', idl_type_name(member.idltype))
-          exception.add_element(property)
-        end
+        node.members.each { |member| add_member(exception, member) }
+        @containers.push(exception)
       end
 
       def leave_exception(_node)
-        # Exception members are emitted from enter_exception.
+        @containers.pop
       end
 
       def visit_enum(node)
         enumeration = element('packagedElement', 'uml:Enumeration', node)
         current_container.add_element(enumeration)
-        @enum_stack.push(enumeration)
       end
 
       def visit_enumerator(node)
@@ -131,10 +262,56 @@ module IDL
         literal.add_attribute('xmi:id', stable_id(node.scoped_name))
         literal.add_attribute('name', node.lm_name.to_s)
         literal.add_attribute('idl2xmi:index', node.value.to_s)
-        @enum_stack.last&.add_element(literal)
+        apply_annotations(literal, node)
+        @elements_by_name[node.enum.scoped_name]&.add_element(literal)
+      end
+
+      def visit_bitmask(node)
+        mask = element('packagedElement', 'uml:Enumeration', node)
+        mask.add_attribute('idl2xmi:kind', 'bitmask')
+        mask.add_attribute('idl2xmi:bitBound', node.bitbound_bits.to_s)
+        current_container.add_element(mask)
+        node.bitvalues.each do |bitvalue|
+          literal = REXML::Element.new('ownedLiteral')
+          literal.add_attribute('xmi:type', 'uml:EnumerationLiteral')
+          literal.add_attribute('xmi:id', stable_id(bitvalue.scoped_name))
+          literal.add_attribute('name', bitvalue.lm_name.to_s)
+          literal.add_attribute('idl2xmi:position', bitvalue.position.to_s)
+          literal.add_attribute('idl2xmi:mask', (1 << bitvalue.position).to_s) if bitvalue.position
+          apply_annotations(literal, bitvalue)
+          mask.add_element(literal)
+        end
+      end
+
+      def visit_bitvalue(_node)
+        # Bit values are emitted by visit_bitmask; RIDL skips these AST children.
+      end
+
+      def visit_bitset(node)
+        bitset = element('packagedElement', 'uml:DataType', node)
+        bitset.add_attribute('idl2xmi:kind', 'bitset')
+        add_generalizations(bitset, node, [node.base].compact)
+        current_container.add_element(bitset)
+        node.bitfields.each_with_index do |field, index|
+          property = REXML::Element.new('ownedAttribute')
+          property.add_attribute('xmi:type', 'uml:Property')
+          property_name = field.lm_name.to_s
+          property_id = property_name.empty? ? "#{node.scoped_name}::bitfield#{index}" : field.scoped_name
+          property.add_attribute('xmi:id', stable_id(property_id))
+          property.add_attribute('name', property_name) unless property_name.empty?
+          property.add_attribute('type', idl_type_name(field.idltype))
+          property.add_attribute('idl2xmi:bits', field.bits.to_s)
+          apply_annotations(property, field)
+          bitset.add_element(property)
+        end
+      end
+
+      def visit_bitfield(_node)
+        # Bit fields are emitted by visit_bitset; RIDL skips these AST children.
       end
 
       def enter_union(node)
+        @forward_declarations.delete(node.scoped_name)
         union = element('packagedElement', 'uml:DataType', node)
         union.add_attribute('idl2xmi:kind', 'union')
         union.add_attribute('idl2xmi:discriminatorType', idl_type_name(node.switchtype))
@@ -143,18 +320,18 @@ module IDL
         # RIDL's AST walk intentionally skips union arms, so emit these members
         # while visiting the union node itself.
         node.members.each do |member|
-          property = REXML::Element.new('ownedAttribute')
-          property.add_attribute('xmi:type', 'uml:Property')
-          property.add_attribute('xmi:id', stable_id(member.scoped_name))
-          property.add_attribute('name', member.lm_name.to_s)
-          property.add_attribute('type', idl_type_name(member.idltype))
+          property = add_member(union, member)
           property.add_attribute('idl2xmi:labels', member.labels.map { |label| union_label(label) }.join(','))
-          union.add_element(property)
         end
+        @containers.push(union)
       end
 
       def leave_union(_node)
-        # Union arms are emitted from enter_union.
+        @containers.pop
+      end
+
+      def declare_union(node)
+        declare_classifier(node, 'uml:DataType')
       end
 
       def visit_const(node)
@@ -166,6 +343,7 @@ module IDL
         constant.add_attribute('isStatic', 'true')
         constant.add_attribute('isReadOnly', 'true')
         constant.add_attribute('default', node.value.to_s) unless node.value.nil?
+        apply_annotations(constant, node)
         current_container.add_element(constant)
       end
 
@@ -192,6 +370,7 @@ module IDL
           result.add_attribute('name', 'return')
           result.add_attribute('type', idl_type_name(node.idltype))
           result.add_attribute('direction', 'return')
+          apply_annotations(result, node)
           operation.add_element(result)
         end
         node.params.each do |parameter|
@@ -201,8 +380,10 @@ module IDL
           argument.add_attribute('name', parameter.lm_name.to_s)
           argument.add_attribute('type', idl_type_name(parameter.idltype))
           argument.add_attribute('direction', parameter_direction(parameter.attribute))
+          apply_annotations(argument, parameter)
           operation.add_element(argument)
         end
+        apply_annotations(operation, node)
         current_container.add_element(operation)
       end
 
@@ -219,10 +400,157 @@ module IDL
         unless node.set_raises.empty?
           attribute.add_attribute('idl2xmi:setRaises', node.set_raises.map { |exception| type_id(exception) }.join(' '))
         end
+        apply_annotations(attribute, node)
         current_container.add_element(attribute)
       end
 
       private
+
+      def emit_deferred_nodes(root)
+        root.walk_members do |node|
+          if IDL::AST::TemplateModule === node
+            emit_template_module(node)
+          elsif IDL::AST::Porttype === node
+            parent = container_for(node.enclosure)
+            with_container(parent) { visit_porttype(node) }
+          elsif node.respond_to?(:walk_members)
+            emit_deferred_nodes(node)
+          end
+        end
+      end
+
+      def emit_template_module(node)
+        template = element('packagedElement', 'uml:Package', node)
+        template.add_attribute('idl2xmi:kind', 'templateModule')
+        current_container_for_enclosure(node).add_element(template)
+        @elements_by_name[node.scoped_name] = template
+        @containers.push(template)
+        node.params.each do |parameter|
+          signature_parameter = REXML::Element.new('idl2xmi:templateParameter')
+          signature_parameter.add_attribute('xmi:id', stable_id(parameter.scoped_name))
+          signature_parameter.add_attribute('name', parameter.lm_name.to_s)
+          signature_parameter.add_attribute('type', idl_type_name(parameter.idltype)) if parameter.respond_to?(:idltype)
+          apply_annotations(signature_parameter, parameter)
+          template.add_element(signature_parameter)
+        end
+        node.walk_members { |member| emit_template_node(member) }
+        @containers.pop
+      end
+
+      def emit_template_node(node)
+        case node
+        when IDL::AST::Include
+          visit_include(node)
+        when IDL::AST::Module
+          enter_module(node)
+          node.walk_members { |member| emit_template_node(member) }
+          leave_module(node)
+        when IDL::AST::Interface
+          if node.is_forward?
+            declare_interface(node)
+          else
+            enter_interface(node)
+            node.walk_members { |member| emit_template_node(member) }
+            leave_interface(node)
+          end
+        when IDL::AST::Component
+          if node.is_forward?
+            declare_component(node)
+          else
+            enter_component(node)
+            node.walk_members { |member| emit_template_node(member) }
+            leave_component(node)
+          end
+        when IDL::AST::Connector
+          enter_connector(node)
+          node.walk_members { |member| emit_template_node(member) }
+          leave_connector(node)
+        when IDL::AST::Home
+          enter_home(node)
+          node.walk_members { |member| emit_template_node(member) }
+          leave_home(node)
+        when IDL::AST::Valuetype, IDL::AST::Eventtype
+          if node.is_forward?
+            declare_valuetype(node)
+          else
+            enter_valuetype(node)
+            node.walk_members { |member| emit_template_node(member) }
+            leave_valuetype(node)
+          end
+        when IDL::AST::Valuebox
+          visit_valuebox(node)
+        when IDL::AST::Exception
+          enter_exception(node)
+          node.walk_members { |member| emit_template_node(member) }
+          leave_exception(node)
+        when IDL::AST::Struct
+          if node.is_forward?
+            declare_struct(node)
+          else
+            enter_struct(node)
+            node.walk_members { |member| emit_template_node(member) }
+            leave_struct(node)
+          end
+        when IDL::AST::Union
+          if node.is_forward?
+            declare_union(node)
+          else
+            enter_union(node)
+            node.walk_members { |member| emit_template_node(member) }
+            leave_union(node)
+          end
+        when IDL::AST::Enum
+          visit_enum(node)
+        when IDL::AST::Enumerator
+          visit_enumerator(node)
+        when IDL::AST::Const
+          visit_const(node)
+        when IDL::AST::Typedef
+          visit_typedef(node)
+        when IDL::AST::Operation
+          visit_operation(node)
+        when IDL::AST::Attribute
+          visit_attribute(node)
+        when IDL::AST::Port
+          visit_port(node)
+        when IDL::AST::Initializer
+          visit_factory(node)
+        when IDL::AST::Finder
+          visit_finder(node)
+        when IDL::AST::BitMask
+          visit_bitmask(node)
+        when IDL::AST::BitSet
+          visit_bitset(node)
+        when IDL::AST::TemplateModuleReference
+          visit_template_reference(node)
+        when IDL::AST::TemplateParam
+          # Parameters are emitted with their owning template signature.
+        when IDL::AST::Member, IDL::AST::UnionMember, IDL::AST::StateMember,
+             IDL::AST::Parameter, IDL::AST::BitValue, IDL::AST::BitField
+          # These are emitted by their owning declaration.
+        else
+          raise "Unsupported IDL AST node in template module: #{node.class.name}"
+        end
+      end
+
+      def current_container_for_enclosure(node)
+        return @model unless node.enclosure && @elements_by_name[node.enclosure.scoped_name]
+
+        @elements_by_name[node.enclosure.scoped_name]
+      end
+
+      def container_for(node)
+        return @model unless node && @elements_by_name[node.scoped_name]
+
+        @elements_by_name[node.scoped_name]
+      end
+
+      def with_container(container)
+        @containers.push(container)
+        yield
+      ensure
+        @containers.pop
+      end
 
       def current_container
         @containers.last
@@ -233,25 +561,30 @@ module IDL
         result.add_attribute('xmi:type', xmi_type)
         result.add_attribute('xmi:id', stable_id(node.scoped_name))
         result.add_attribute('name', node.lm_name.to_s)
+        @elements_by_name[node.scoped_name] = result
+        apply_annotations(result, node)
         result
       end
 
       def idl_type_name(type)
         if type.respond_to?(:cxx_type)
           type.cxx_type
+        elsif IDL::Type::Const === type
+          idl_type_name(type.type)
         elsif IDL::Type::NodeType === type
           "::#{type.node.scoped_name}"
         elsif IDL::Type::Array === type
           type.sizes.reverse.inject(idl_type_name(type.basetype)) do |element_type, size|
-            dimension = if size.respond_to?(:node)
-                          size.node.value
-                        elsif size.respond_to?(:value)
-                          size.value
-                        else
-                          size
-                        end
+            dimension = constant_value(size)
             "std::array<#{element_type}, #{dimension}>"
           end
+        elsif IDL::Type::Sequence === type
+          element_type = idl_type_name(type.basetype)
+          type.size ? "TAOX11_NAMESPACE::IDL::bounded_vector<#{element_type}, #{constant_value(type.size)}>" : "std::vector<#{element_type}>"
+        elsif IDL::Type::Map === type
+          key_type = idl_type_name(type.keytype)
+          value_type = idl_type_name(type.valuetype)
+          type.size ? "TAOX11_NAMESPACE::IDL::bounded_map<#{key_type}, #{value_type}, #{constant_value(type.size)}>" : "std::map<#{key_type}, #{value_type}>"
         elsif IDL::Type::String === type || IDL::Type::WString === type
           bounded_type_name(type.class == IDL::Type::String ? 'TAOX11_IDL::bounded_string' : 'TAOX11_IDL::bounded_wstring', type.size)
         elsif IDL::Type::Fixed === type
@@ -289,7 +622,111 @@ module IDL
       end
 
       def type_id(type)
-        stable_id(type.node.scoped_name)
+        node = type.respond_to?(:node) ? type.node : type
+        node = node.resolved_node if node.respond_to?(:resolved_node)
+        stable_id(node.scoped_name)
+      end
+
+      def add_member(container, member)
+        property = REXML::Element.new('ownedAttribute')
+        property.add_attribute('xmi:type', 'uml:Property')
+        property.add_attribute('xmi:id', stable_id(member.scoped_name))
+        property.add_attribute('name', member.lm_name.to_s)
+        property.add_attribute('type', idl_type_name(member.idltype))
+        apply_annotations(property, member)
+        container.add_element(property)
+        property
+      end
+
+      def add_state_member(member)
+        property = add_member(current_container, member)
+        property.add_attribute('idl2xmi:visibility', member.visibility.to_s)
+      end
+
+      def visit_initializer(node, kind)
+        operation = REXML::Element.new('ownedOperation')
+        operation.add_attribute('xmi:type', 'uml:Operation')
+        operation.add_attribute('xmi:id', stable_id(node.scoped_name))
+        operation.add_attribute('name', node.lm_name.to_s)
+        operation.add_attribute('idl2xmi:kind', kind)
+        operation.add_attribute('raisedException', node.raises.map { |exception| type_id(exception) }.join(' ')) unless node.raises.empty?
+        node.params.each do |parameter|
+          argument = REXML::Element.new('ownedParameter')
+          argument.add_attribute('xmi:type', 'uml:Parameter')
+          argument.add_attribute('xmi:id', stable_id(parameter.scoped_name))
+          argument.add_attribute('name', parameter.lm_name.to_s)
+          argument.add_attribute('type', idl_type_name(parameter.idltype))
+          argument.add_attribute('direction', 'in')
+          operation.add_element(argument)
+        end
+        apply_annotations(operation, node)
+        current_container.add_element(operation)
+      end
+
+      def declare_classifier(node, xmi_type)
+        @forward_declarations[node.scoped_name] = [node, xmi_type]
+      end
+
+      def emit_forward_declarations
+        @forward_declarations.each_value do |node, xmi_type|
+          declaration = element('idl2xmi:forwardDeclaration', xmi_type, node)
+          @model.add_element(declaration)
+        end
+      end
+
+      def add_generalizations(target, node, bases)
+        bases.compact.each do |base|
+          general = base.respond_to?(:node) ? base.node : base
+          generalization = REXML::Element.new('generalization')
+          generalization.add_attribute('xmi:type', 'uml:Generalization')
+          generalization.add_attribute('xmi:id', stable_id("#{node.scoped_name}::#{general.scoped_name}"))
+          generalization.add_attribute('general', stable_id(general.scoped_name))
+          target.add_element(generalization)
+        end
+      end
+
+      def add_references(target, attribute, references)
+        return if references.nil? || references.empty?
+
+        target.add_attribute(attribute, references.map { |reference| type_id(reference) }.join(' '))
+      end
+
+      def constant_value(value)
+        if value.respond_to?(:node)
+          value.node.value
+        elsif value.respond_to?(:value)
+          value.value
+        else
+          value
+        end
+      end
+
+      def apply_annotations(target, node)
+        return unless node.respond_to?(:annotations)
+
+        node.annotations.each_with_index do |annotation, index|
+          annotation_element = REXML::Element.new('idl2xmi:annotation')
+          annotation_element.add_attribute('xmi:id', stable_id("#{node.scoped_name}::annotation#{index}"))
+          annotation_element.add_attribute('name', annotation.id.to_s)
+          annotation.fields.each do |name, value|
+            field = REXML::Element.new('idl2xmi:field')
+            field.add_attribute('name', name.to_s)
+            field.add_attribute('value', annotation_value(value))
+            annotation_element.add_element(field)
+          end
+          target.add_element(annotation_element)
+        end
+      end
+
+      def annotation_value(value)
+        case value
+        when Array
+          value.map { |item| annotation_value(item) }.join(',')
+        when Hash
+          value.map { |key, item| "#{key}=#{annotation_value(item)}" }.join(',')
+        else
+          value.to_s
+        end
       end
 
       def stable_id(name)
