@@ -1,0 +1,10 @@
+<xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20131001' xmlns:uml='http://www.omg.org/spec/UML/20161101' xmlns:idl2xmi='https://github.com/jwillemsen/idl2xmi/profile' xmi:version='2.5.1'>
+  <uml:Model xmi:id='idl2xmi-model' name='IDL model'>
+    <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-LongArray' name='LongArray' idl2xmi:kind='typedef' idl2xmi:aliasedType='std::array&lt;int32_t, 3&gt;'/>
+    <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CharMatrix' name='CharMatrix' idl2xmi:kind='typedef' idl2xmi:aliasedType='std::array&lt;std::array&lt;char, 4&gt;, 2&gt;'/>
+    <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Samples' name='Samples'>
+      <ownedAttribute xmi:type='uml:Property' type='::LongArray' xmi:id='idl2xmi-Samples__values' name='values'/>
+      <ownedAttribute xmi:type='uml:Property' type='::CharMatrix' xmi:id='idl2xmi-Samples__matrix' name='matrix'/>
+    </packagedElement>
+  </uml:Model>
+</xmi:XMI>
