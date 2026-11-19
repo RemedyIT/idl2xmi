@@ -704,7 +704,8 @@ module IDL
       def apply_annotations(target, node)
         return unless node.respond_to?(:annotations)
 
-        node.annotations.each_with_index do |annotation, index|
+        index = 0
+        node.annotations.each do |annotation|
           annotation_element = REXML::Element.new('idl2xmi:annotation')
           annotation_element.add_attribute('xmi:id', stable_id("#{node.scoped_name}::annotation#{index}"))
           annotation_element.add_attribute('name', annotation.id.to_s)
@@ -715,6 +716,7 @@ module IDL
             annotation_element.add_element(field)
           end
           target.add_element(annotation_element)
+          index += 1
         end
       end
 
