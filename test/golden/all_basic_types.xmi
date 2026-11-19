@@ -1,25 +1,25 @@
 <xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20131001' xmlns:uml='http://www.omg.org/spec/UML/20161101' xmlns:idl2xmi='https://github.com/jwillemsen/idl2xmi/profile' xmi:version='2.5.1'>
   <uml:Model xmi:id='idl2xmi-model' name='IDL model'>
     <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-BasicTypes' name='BasicTypes'>
-      <ownedAttribute xmi:type='uml:Property' type='boolean' xmi:id='idl2xmi-BasicTypes__boolean_value' name='boolean_value'/>
+      <ownedAttribute xmi:type='uml:Property' type='bool' xmi:id='idl2xmi-BasicTypes__boolean_value' name='boolean_value'/>
       <ownedAttribute xmi:type='uml:Property' type='char' xmi:id='idl2xmi-BasicTypes__char_value' name='char_value'/>
-      <ownedAttribute xmi:type='uml:Property' type='wchar' xmi:id='idl2xmi-BasicTypes__wchar_value' name='wchar_value'/>
-      <ownedAttribute xmi:type='uml:Property' type='octet' xmi:id='idl2xmi-BasicTypes__octet_value' name='octet_value'/>
-      <ownedAttribute xmi:type='uml:Property' type='short' xmi:id='idl2xmi-BasicTypes__short_value' name='short_value'/>
-      <ownedAttribute xmi:type='uml:Property' type='unsigned short' xmi:id='idl2xmi-BasicTypes__unsigned_short_value' name='unsigned_short_value'/>
-      <ownedAttribute xmi:type='uml:Property' type='long' xmi:id='idl2xmi-BasicTypes__long_value' name='long_value'/>
-      <ownedAttribute xmi:type='uml:Property' type='unsigned long' xmi:id='idl2xmi-BasicTypes__unsigned_long_value' name='unsigned_long_value'/>
-      <ownedAttribute xmi:type='uml:Property' type='long long' xmi:id='idl2xmi-BasicTypes__long_long_value' name='long_long_value'/>
-      <ownedAttribute xmi:type='uml:Property' type='unsigned long long' xmi:id='idl2xmi-BasicTypes__unsigned_long_long_value' name='unsigned_long_long_value'/>
+      <ownedAttribute xmi:type='uml:Property' type='wchar_t' xmi:id='idl2xmi-BasicTypes__wchar_value' name='wchar_value'/>
+      <ownedAttribute xmi:type='uml:Property' type='uint8_t' xmi:id='idl2xmi-BasicTypes__octet_value' name='octet_value'/>
+      <ownedAttribute xmi:type='uml:Property' type='int16_t' xmi:id='idl2xmi-BasicTypes__short_value' name='short_value'/>
+      <ownedAttribute xmi:type='uml:Property' type='uint16_t' xmi:id='idl2xmi-BasicTypes__unsigned_short_value' name='unsigned_short_value'/>
+      <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-BasicTypes__long_value' name='long_value'/>
+      <ownedAttribute xmi:type='uml:Property' type='uint32_t' xmi:id='idl2xmi-BasicTypes__unsigned_long_value' name='unsigned_long_value'/>
+      <ownedAttribute xmi:type='uml:Property' type='int64_t' xmi:id='idl2xmi-BasicTypes__long_long_value' name='long_long_value'/>
+      <ownedAttribute xmi:type='uml:Property' type='uint64_t' xmi:id='idl2xmi-BasicTypes__unsigned_long_long_value' name='unsigned_long_long_value'/>
       <ownedAttribute xmi:type='uml:Property' type='float' xmi:id='idl2xmi-BasicTypes__float_value' name='float_value'/>
       <ownedAttribute xmi:type='uml:Property' type='double' xmi:id='idl2xmi-BasicTypes__double_value' name='double_value'/>
       <ownedAttribute xmi:type='uml:Property' type='long double' xmi:id='idl2xmi-BasicTypes__long_double_value' name='long_double_value'/>
-      <ownedAttribute xmi:type='uml:Property' type='any' xmi:id='idl2xmi-BasicTypes__any_value' name='any_value'/>
-      <ownedAttribute xmi:type='uml:Property' type='Object' xmi:id='idl2xmi-BasicTypes__object_value' name='object_value'/>
-      <ownedAttribute xmi:type='uml:Property' type='ValueBase' xmi:id='idl2xmi-BasicTypes__value_base_value' name='value_base_value'/>
-      <ownedAttribute xmi:type='uml:Property' type='fixed&lt;8,2&gt;' xmi:id='idl2xmi-BasicTypes__fixed_value' name='fixed_value'/>
-      <ownedAttribute xmi:type='uml:Property' type='string' xmi:id='idl2xmi-BasicTypes__string_value' name='string_value'/>
-      <ownedAttribute xmi:type='uml:Property' type='wstring' xmi:id='idl2xmi-BasicTypes__wstring_value' name='wstring_value'/>
+      <ownedAttribute xmi:type='uml:Property' type='TAOX11_NAMESPACE::CORBA::Any' xmi:id='idl2xmi-BasicTypes__any_value' name='any_value'/>
+      <ownedAttribute xmi:type='uml:Property' type='TAOX11_NAMESPACE::CORBA::Object' xmi:id='idl2xmi-BasicTypes__object_value' name='object_value'/>
+      <ownedAttribute xmi:type='uml:Property' type='TAOX11_NAMESPACE::CORBA::ValueBase' xmi:id='idl2xmi-BasicTypes__value_base_value' name='value_base_value'/>
+      <ownedAttribute xmi:type='uml:Property' type='TAOX11_NAMESPACE::IDL::Fixed&lt;8, 2&gt;' xmi:id='idl2xmi-BasicTypes__fixed_value' name='fixed_value'/>
+      <ownedAttribute xmi:type='uml:Property' type='std::string' xmi:id='idl2xmi-BasicTypes__string_value' name='string_value'/>
+      <ownedAttribute xmi:type='uml:Property' type='std::wstring' xmi:id='idl2xmi-BasicTypes__wstring_value' name='wstring_value'/>
     </packagedElement>
   </uml:Model>
 </xmi:XMI>
