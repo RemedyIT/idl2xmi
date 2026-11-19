@@ -20,13 +20,13 @@ eventtype Changed {
 };
 
 porttype ControlPorts {
-  provides Control control;
+  provides Control endpoint;
   uses multiple Control observers;
   attribute long count;
 };
 
 component Worker supports Control {
-  provides Control control;
+  provides Control endpoint;
   uses multiple Control peers;
   attribute long count;
 };
