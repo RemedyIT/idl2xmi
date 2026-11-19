@@ -1,0 +1,21 @@
+<xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20131001' xmlns:uml='http://www.omg.org/spec/UML/20161101' xmlns:idl2xmi='https://github.com/jwillemsen/idl2xmi/profile' xmi:version='2.5.1'>
+  <uml:Model xmi:id='idl2xmi-model' name='IDL model'>
+    <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-Base' name='Base' isAbstract='false' idl2xmi:local='false' idl2xmi:pseudo='false'>
+      <ownedOperation xmi:type='uml:Operation' xmi:id='idl2xmi-Base__ping' name='ping'/>
+    </packagedElement>
+    <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-Counter' name='Counter' isAbstract='false' idl2xmi:local='false' idl2xmi:pseudo='false'>
+      <generalization xmi:type='uml:Generalization' xmi:id='idl2xmi-Counter__Base' general='idl2xmi-Base'/>
+      <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-Counter__VERSION' name='VERSION' isStatic='true' isReadOnly='true' default='1'/>
+      <ownedAttribute xmi:type='uml:Property' type='std::string' xmi:id='idl2xmi-Counter__name' name='name' isReadOnly='true'/>
+      <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-Counter__value' name='value' isReadOnly='false'/>
+      <ownedOperation xmi:type='uml:Operation' xmi:id='idl2xmi-Counter__add' name='add'>
+        <ownedParameter xmi:type='uml:Parameter' type='int32_t' xmi:id='idl2xmi-Counter__add__return' name='return' direction='return'/>
+        <ownedParameter xmi:type='uml:Parameter' type='int32_t' xmi:id='idl2xmi-Counter__add__left' name='left' direction='in'/>
+        <ownedParameter xmi:type='uml:Parameter' type='int32_t' xmi:id='idl2xmi-Counter__add__right' name='right' direction='in'/>
+      </ownedOperation>
+      <ownedOperation xmi:type='uml:Operation' xmi:id='idl2xmi-Counter__update' name='update'>
+        <ownedParameter xmi:type='uml:Parameter' type='int32_t' xmi:id='idl2xmi-Counter__update__value' name='value' direction='inout'/>
+      </ownedOperation>
+    </packagedElement>
+  </uml:Model>
+</xmi:XMI>
