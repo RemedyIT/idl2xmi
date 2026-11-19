@@ -428,7 +428,10 @@ module IDL
           signature_parameter = REXML::Element.new('idl2xmi:templateParameter')
           signature_parameter.add_attribute('xmi:id', stable_id(parameter.scoped_name))
           signature_parameter.add_attribute('name', parameter.lm_name.to_s)
-          signature_parameter.add_attribute('type', idl_type_name(parameter.idltype)) if parameter.respond_to?(:idltype)
+          if parameter.respond_to?(:idltype)
+            signature_type = IDL::Type::Any === parameter.idltype ? 'typename' : idl_type_name(parameter.idltype)
+            signature_parameter.add_attribute('type', signature_type)
+          end
           apply_annotations(signature_parameter, parameter)
           template.add_element(signature_parameter)
         end
@@ -621,6 +624,8 @@ module IDL
       end
 
       def type_id(type)
+        return idl_type_name(type) unless type.respond_to?(:node) || type.respond_to?(:scoped_name)
+
         node = type.respond_to?(:node) ? type.node : type
         node = node.resolved_node if node.respond_to?(:resolved_node)
         stable_id(node.scoped_name)
