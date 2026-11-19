@@ -1,0 +1,8 @@
+module Container <typename T> {
+  typedef sequence<T> Items;
+  struct Box {
+    T value;
+  };
+};
+
+module Container<long> LongContainer;
