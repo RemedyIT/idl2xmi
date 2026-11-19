@@ -30,12 +30,12 @@ jobs:
 
       - name: Generate XMI golden output for review
         run: |
-          bundle exec ruby script/idl2xmi.rb test/fixtures/struct_one_member.idl /tmp/struct_one_member.xmi
-          bundle exec ruby script/idl2xmi.rb test/fixtures/all_basic_types.idl /tmp/all_basic_types.xmi
-          bundle exec ruby script/idl2xmi.rb test/fixtures/enum.idl /tmp/enum.xmi
-          cat /tmp/struct_one_member.xmi
-          cat /tmp/all_basic_types.xmi
-          cat /tmp/enum.xmi
+          for input in test/fixtures/*.idl; do
+            name=$(basename "$input" .idl)
+            output="/tmp/${name}.xmi"
+            bundle exec ruby script/idl2xmi.rb "$input" "$output"
+            cat "$output"
+          done
         env:
           RUBYLIB: ${{ github.workspace }}/_ridl/lib
 
