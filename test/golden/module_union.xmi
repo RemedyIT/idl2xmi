@@ -1,0 +1,11 @@
+<xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20131001' xmlns:uml='http://www.omg.org/spec/UML/20161101' xmlns:idl2xmi='https://github.com/jwillemsen/idl2xmi/profile' xmi:version='2.5.1'>
+  <uml:Model xmi:id='idl2xmi-model' name='IDL model'>
+    <packagedElement xmi:type='uml:Package' xmi:id='idl2xmi-Example' name='Example'>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Example__Choice' name='Choice' idl2xmi:kind='union' idl2xmi:discriminatorType='int32_t'>
+        <ownedAttribute xmi:type='uml:Property' type='std::string' xmi:id='idl2xmi-Example__Choice__text' name='text' idl2xmi:labels='0'/>
+        <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-Example__Choice__number' name='number' idl2xmi:labels='1'/>
+        <ownedAttribute xmi:type='uml:Property' type='bool' xmi:id='idl2xmi-Example__Choice__flag' name='flag' idl2xmi:labels='default'/>
+      </packagedElement>
+    </packagedElement>
+  </uml:Model>
+</xmi:XMI>
