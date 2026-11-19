@@ -2,9 +2,9 @@
 
 A RIDL backend for exporting CORBA IDL declarations as UML XMI.
 
-The backend registers as `:idl2xmi` and walks the RIDL AST. It currently maps
-modules, constants, interfaces, structs, enums, unions, arrays, and basic IDL
-types, and exceptions to UML XMI.
+The backend registers as `:idl2xmi` and walks the RIDL AST with IDL version 4
+enabled. It maps the RIDL IDL 4 declaration and type nodes to UML XMI, using
+`idl2xmi` profile data where UML has no direct representation.
 
 ## Requirements
 
@@ -62,5 +62,15 @@ bundle exec ruby script/update_golden.rb
   attribute.
 - IDL unions become UML `DataType` classifiers with a discriminator type and
   properties whose `idl2xmi:labels` attribute records the case labels.
+- IDL4 maps, sequences, bounded strings, bitmasks, bitsets, and extended-width
+  integer types retain their TAOX11 C++ type spelling; bitmask values and
+  bitset fields are represented as enumeration literals and properties.
+- IDL3 valuetypes, eventtypes, valueboxes, components, connectors, homes,
+  ports, and porttypes are represented as UML classifiers and operations with
+  IDL-specific profile attributes. Template modules retain their signature,
+  and instantiated modules retain their template and argument references.
+- RIDL annotations are retained as nested `idl2xmi:annotation` elements.
 
-The output is not yet a complete UML profile or a complete IDL3 mapping.
+The output is an IDL-to-XMI interchange mapping, not a UML profile that makes
+all IDL semantics executable in a UML tool. The supported declarations and
+types are covered by recursive IDL fixtures and committed XMI goldens.
