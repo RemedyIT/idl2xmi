@@ -28,17 +28,6 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
 
-      - name: Generate XMI snapshots
-        run: |
-          for input in test/fixtures/*.idl; do
-            name=$(basename "$input" .idl)
-            output="/tmp/${name}.xmi"
-            bundle exec ruby script/idl2xmi.rb "$input" "$output"
-            cat "$output"
-          done
-        env:
-          RUBYLIB: ${{ github.workspace }}/_ridl/lib
-
       - name: Run tests
         run: bundle exec rake test
         env:
