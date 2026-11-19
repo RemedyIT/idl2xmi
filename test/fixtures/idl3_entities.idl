@@ -8,7 +8,7 @@ exception Failure {
 
 valuetype Record {
   public long id;
-  private string<32> label;
+  private long label;
   factory create(in long id) raises (Failure);
   long value();
 };
