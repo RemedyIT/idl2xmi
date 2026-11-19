@@ -1,0 +1,11 @@
+interface Base {
+  void ping();
+};
+
+interface Counter : Base {
+  const long VERSION = 1;
+  readonly attribute string name;
+  attribute long value;
+  long add(in long left, in long right);
+  void update(inout long value);
+};
