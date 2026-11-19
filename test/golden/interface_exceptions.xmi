@@ -1,0 +1,14 @@
+<xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20131001' xmlns:uml='http://www.omg.org/spec/UML/20161101' xmlns:idl2xmi='https://github.com/jwillemsen/idl2xmi/profile' xmi:version='2.5.1'>
+  <uml:Model xmi:id='idl2xmi-model' name='IDL model'>
+    <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Failure' name='Failure' idl2xmi:kind='exception'>
+      <ownedAttribute xmi:type='uml:Property' type='std::string' xmi:id='idl2xmi-Failure__reason' name='reason'/>
+    </packagedElement>
+    <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-Service' name='Service' isAbstract='false' idl2xmi:local='false' idl2xmi:pseudo='false'>
+      <ownedOperation xmi:type='uml:Operation' xmi:id='idl2xmi-Service__read' name='read' raisedException='idl2xmi-Failure'>
+        <ownedParameter xmi:type='uml:Parameter' type='int32_t' xmi:id='idl2xmi-Service__read__key' name='key' direction='in'/>
+        <ownedParameter xmi:type='uml:Parameter' type='std::string' xmi:id='idl2xmi-Service__read__value' name='value' direction='out'/>
+      </ownedOperation>
+      <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-Service__count' name='count' isReadOnly='false' idl2xmi:getRaises='idl2xmi-Failure' idl2xmi:setRaises='idl2xmi-Failure'/>
+    </packagedElement>
+  </uml:Model>
+</xmi:XMI>
