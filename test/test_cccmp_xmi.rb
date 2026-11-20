@@ -10,6 +10,7 @@ class CccmpXmiTest < Minitest::Test
     'xmi' => 'http://www.omg.org/spec/XMI/20131001',
     'uml' => 'http://www.omg.org/spec/UML/20161101',
     'BaseIDL' => 'https://www.omg.org/spec/CCCMP/20070501/BaseIDL',
+    'ComponentIDL' => 'https://www.omg.org/spec/CCCMP/20070501/ComponentIDL',
     'IDL4' => 'https://www.remedy.nl/idl2xmi/profile/IDL4/1.0'
   }.freeze
 
@@ -55,6 +56,20 @@ class CccmpXmiTest < Minitest::Test
     document = generate('arrays.idl')
 
     assert profile_application(document, 'BaseIDL:CORBAArray', 'base_DataType', 'idl2xmi-LongArray')
+  end
+
+  def test_ccm_home_associations_ports_and_factories_use_component_idl
+    document = generate('idl3_entities.idl')
+    home = by_id(document, 'idl2xmi-WorkerHome')
+
+    assert_equal 'uml:Interface', home.attributes['xmi:type']
+    assert profile_application(document, 'ComponentIDL:CORBAHome', 'base_Interface', 'idl2xmi-WorkerHome')
+    assert profile_application(document, 'ComponentIDL:CORBAManages', 'base_Association', 'idl2xmi-WorkerHome__CORBAManages')
+    assert profile_application(document, 'ComponentIDL:CORBAPrimaryKey', 'base_Association', 'idl2xmi-WorkerHome__CORBAPrimaryKey')
+    refute_empty REXML::XPath.match(document, '//ComponentIDL:CORBAProvides', NS)
+    refute_empty REXML::XPath.match(document, '//ComponentIDL:CORBAUses', NS)
+    refute_empty REXML::XPath.match(document, '//ComponentIDL:CORBAFactory', NS)
+    refute_empty REXML::XPath.match(document, '//ComponentIDL:CORBAFinder', NS)
   end
 
   private
