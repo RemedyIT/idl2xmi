@@ -1,5 +1,5 @@
 interface Control {
-  void start(in long id);
+  void start(in long id) context ("region", "trace-id");
 };
 
 valuetype BaseRecord {
@@ -40,7 +40,9 @@ component Worker supports Control {
   attribute long count;
 };
 
-typedef long WorkerId;
+valuetype WorkerId {
+  public long value;
+};
 
 home WorkerHome manages Worker primarykey WorkerId {
   factory create(in long id);
