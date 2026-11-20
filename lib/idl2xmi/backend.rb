@@ -4,7 +4,6 @@ module IDL
   module Idl2xmi
     TITLE = 'RIDL IDL-to-XMI backend'.freeze
     COPYRIGHT = 'Copyright (c) 2026'.freeze
-    VERSION = { major: 0, minor: 1, release: 0 }.freeze
 
     module ScannerMixin
       def chk_identifier(identifier)

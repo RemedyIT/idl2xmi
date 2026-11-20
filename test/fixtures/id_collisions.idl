@@ -1,0 +1,28 @@
+// Regression fixture: every construct here used to produce duplicate xmi:ids.
+
+// A user module named CORBA must not clash with the built-in CORBA package.
+module CORBA {
+  struct long_holder { long value; };
+};
+
+// "a::b" and "a__b" must map to different ids.
+module a {
+  struct b { long x; };
+};
+struct a__b { long y; };
+
+// Member and parameter names that match synthetic id parts.
+union Choice switch (long) {
+  case 1: long discriminator;
+  default: short other;
+};
+
+interface Ops {
+  // Annotations on an operation with a return value were emitted twice.
+  @deprecated long annotated(in long return);
+};
+
+// A forward declaration after the definition is legal IDL.
+interface Ops;
+
+typedef sequence<long, 3> ThreeLongs;

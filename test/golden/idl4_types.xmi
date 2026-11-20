@@ -1,139 +1,136 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20131001' xmlns:uml='http://www.omg.org/spec/UML/20161101' xmlns:BaseIDL='https://www.omg.org/spec/CCCMP/20070501/BaseIDL' xmlns:ComponentIDL='https://www.omg.org/spec/CCCMP/20070501/ComponentIDL' xmlns:IDL4='https://www.remedy.nl/idl2xmi/profile/IDL4/1.0' xmi:version='2.5.1'>
-  <uml:Model xmi:id='idl2xmi-model' name='IDL model'>
-    <packagedElement xmi:type='uml:Package' xmi:id='idl2xmi-CORBA' name='CORBA'>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__void' name='void'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__boolean' name='boolean'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__char' name='char'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__wchar' name='wchar'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__octet' name='octet'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__short' name='short'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__unsignedShort' name='unsignedShort'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__long' name='long'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__unsignedLong' name='unsignedLong'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__longLong' name='longLong'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__unsignedLongLong' name='unsignedLongLong'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__float' name='float'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__double' name='double'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__longDouble' name='longDouble'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__any' name='any'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__string' name='string'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__wstring' name='wstring'/>
-      <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-CORBA__Object' name='Object'/>
-      <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-CORBA__ValueBase' name='ValueBase'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__int8' name='int8'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__uint8' name='uint8'/>
+  <uml:Model xmi:id='idl2xmi--model' name='IDL model'>
+    <packagedElement xmi:type='uml:Package' xmi:id='idl2xmi--CORBA' name='CORBA'>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.void' name='void'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.boolean' name='boolean'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.char' name='char'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.wchar' name='wchar'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.octet' name='octet'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.short' name='short'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.unsignedShort' name='unsignedShort'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.long' name='long'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.unsignedLong' name='unsignedLong'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.longLong' name='longLong'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.unsignedLongLong' name='unsignedLongLong'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.float' name='float'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.double' name='double'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.longDouble' name='longDouble'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.any' name='any'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.string' name='string'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.wstring' name='wstring'/>
+      <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi--CORBA.Object' name='Object'/>
+      <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi--CORBA.ValueBase' name='ValueBase'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.int8' name='int8'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.uint8' name='uint8'/>
     </packagedElement>
     <packagedElement xmi:type='uml:Package' xmi:id='idl2xmi-Modern' name='Modern'>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern__Label' name='Label'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern__WideLabel' name='WideLabel'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern__Ints' name='Ints'>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__long' xmi:id='idl2xmi-Modern__Ints__members' name='members' lower='0' upper='2'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern.Label' name='Label'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern.WideLabel' name='WideLabel'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern.Ints' name='Ints'>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.long' xmi:id='idl2xmi-Modern.Ints--members' name='members' lower='0' upper='3'/>
       </packagedElement>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern__Longs' name='Longs'>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__long' xmi:id='idl2xmi-Modern__Longs__members' name='members' lower='0' upper='*'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern.Longs' name='Longs'>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.long' xmi:id='idl2xmi-Modern.Longs--members' name='members' lower='0' upper='*'/>
       </packagedElement>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern__StringMap' name='StringMap'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern__IntegerMap' name='IntegerMap'/>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern__Values' name='Values'>
-        <ownedComment xmi:type='uml:Comment' xmi:id='idl2xmi-Modern__Values__annotation0' annotatedElement='idl2xmi-Modern__Values'>
-          <body>
-            @marker()
-          </body>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern.StringMap' name='StringMap'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern.IntegerMap' name='IntegerMap'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern.Values' name='Values'>
+        <ownedComment xmi:type='uml:Comment' xmi:id='idl2xmi-Modern.Values--annotation0' annotatedElement='idl2xmi-Modern.Values'>
+          <body>@marker()</body>
         </ownedComment>
-        <ownedComment xmi:type='uml:Comment' xmi:id='idl2xmi-Modern__Values__annotation1' annotatedElement='idl2xmi-Modern__Values'>
-          <body>
-            @range(min=0;max=100)
-          </body>
+        <ownedComment xmi:type='uml:Comment' xmi:id='idl2xmi-Modern.Values--annotation1' annotatedElement='idl2xmi-Modern.Values'>
+          <body>@range(min=0;max=100)</body>
         </ownedComment>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__int8' xmi:id='idl2xmi-Modern__Values__tiny' name='tiny' isOrdered='true'/>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__uint8' xmi:id='idl2xmi-Modern__Values__unsigned_tiny' name='unsigned_tiny' isOrdered='true'/>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__short' xmi:id='idl2xmi-Modern__Values__signed_short' name='signed_short' isOrdered='true'/>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__unsignedShort' xmi:id='idl2xmi-Modern__Values__small' name='small' isOrdered='true'/>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__long' xmi:id='idl2xmi-Modern__Values__signed_long' name='signed_long' isOrdered='true'/>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__unsignedLong' xmi:id='idl2xmi-Modern__Values__unsigned_long' name='unsigned_long' isOrdered='true'/>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__longLong' xmi:id='idl2xmi-Modern__Values__signed_long_long' name='signed_long_long' isOrdered='true'/>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__unsignedLongLong' xmi:id='idl2xmi-Modern__Values__unsigned_long_long' name='unsigned_long_long' isOrdered='true'/>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-Modern__StringMap' xmi:id='idl2xmi-Modern__Values__lookup' name='lookup' isOrdered='true'/>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-Modern__IntegerMap' xmi:id='idl2xmi-Modern__Values__unbounded_lookup' name='unbounded_lookup' isOrdered='true'/>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-Modern__Label' xmi:id='idl2xmi-Modern__Values__label_value' name='label_value' isOrdered='true'/>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-Modern__WideLabel' xmi:id='idl2xmi-Modern__Values__wide_label' name='wide_label' isOrdered='true'/>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.int8' xmi:id='idl2xmi-Modern.Values.tiny' name='tiny' isOrdered='true'/>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.uint8' xmi:id='idl2xmi-Modern.Values.unsigned_tiny' name='unsigned_tiny' isOrdered='true'/>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.short' xmi:id='idl2xmi-Modern.Values.signed_short' name='signed_short' isOrdered='true'/>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.unsignedShort' xmi:id='idl2xmi-Modern.Values.small' name='small' isOrdered='true'/>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.long' xmi:id='idl2xmi-Modern.Values.signed_long' name='signed_long' isOrdered='true'/>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.unsignedLong' xmi:id='idl2xmi-Modern.Values.unsigned_long' name='unsigned_long' isOrdered='true'/>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.longLong' xmi:id='idl2xmi-Modern.Values.signed_long_long' name='signed_long_long' isOrdered='true'/>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.unsignedLongLong' xmi:id='idl2xmi-Modern.Values.unsigned_long_long' name='unsigned_long_long' isOrdered='true'/>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-Modern.StringMap' xmi:id='idl2xmi-Modern.Values.lookup' name='lookup' isOrdered='true'/>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-Modern.IntegerMap' xmi:id='idl2xmi-Modern.Values.unbounded_lookup' name='unbounded_lookup' isOrdered='true'/>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-Modern.Label' xmi:id='idl2xmi-Modern.Values.label_value' name='label_value' isOrdered='true'/>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-Modern.WideLabel' xmi:id='idl2xmi-Modern.Values.wide_label' name='wide_label' isOrdered='true'/>
       </packagedElement>
-      <packagedElement xmi:type='uml:Enumeration' xmi:id='idl2xmi-Modern__Permissions' name='Permissions'>
-        <ownedLiteral xmi:type='uml:EnumerationLiteral' xmi:id='idl2xmi-Modern__Permissions__read' name='read'/>
-        <ownedLiteral xmi:type='uml:EnumerationLiteral' xmi:id='idl2xmi-Modern__Permissions__write' name='write'/>
-        <ownedLiteral xmi:type='uml:EnumerationLiteral' xmi:id='idl2xmi-Modern__Permissions__execute' name='execute'/>
+      <packagedElement xmi:type='uml:Enumeration' xmi:id='idl2xmi-Modern.Permissions' name='Permissions'>
+        <ownedLiteral xmi:type='uml:EnumerationLiteral' xmi:id='idl2xmi-Modern.Permissions.read' name='read'/>
+        <ownedLiteral xmi:type='uml:EnumerationLiteral' xmi:id='idl2xmi-Modern.Permissions.write' name='write'/>
+        <ownedLiteral xmi:type='uml:EnumerationLiteral' xmi:id='idl2xmi-Modern.Permissions.execute' name='execute'/>
       </packagedElement>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern__Header' name='Header'>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__boolean' xmi:id='idl2xmi-Modern__Header__present' name='present'/>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__octet' xmi:id='idl2xmi-Modern__Header__flags' name='flags'/>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__short' xmi:id='idl2xmi-Modern__Header__identifier' name='identifier'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern.Header' name='Header'>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.boolean' xmi:id='idl2xmi-Modern.Header.present' name='present'/>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.octet' xmi:id='idl2xmi-Modern.Header.flags' name='flags'/>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.short' xmi:id='idl2xmi-Modern.Header.identifier' name='identifier'/>
       </packagedElement>
-      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern__ExtendedHeader' name='ExtendedHeader'>
-        <generalization xmi:type='uml:Generalization' xmi:id='idl2xmi-Modern__ExtendedHeader__Modern__Header' general='idl2xmi-Modern__Header'/>
-        <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__boolean' xmi:id='idl2xmi-Modern__ExtendedHeader__extension' name='extension'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Modern.ExtendedHeader' name='ExtendedHeader'>
+        <generalization xmi:type='uml:Generalization' xmi:id='idl2xmi-Modern.ExtendedHeader--generalization--Modern.Header' general='idl2xmi-Modern.Header'/>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.boolean' xmi:id='idl2xmi-Modern.ExtendedHeader.extension' name='extension'/>
       </packagedElement>
     </packagedElement>
-    <profileApplication xmi:type='uml:ProfileApplication' xmi:id='idl2xmi-profileApplication__BaseIDL'>
+    <profileApplication xmi:type='uml:ProfileApplication' xmi:id='idl2xmi--profileApplication.BaseIDL'>
       <appliedProfile href='https://www.omg.org/spec/CCCMP/20070501#EAPK_C6301B3D_712C_46e5_827E_8DEE3343B2E7'/>
     </profileApplication>
-    <profileApplication xmi:type='uml:ProfileApplication' xmi:id='idl2xmi-profileApplication__ComponentIDL'>
+    <profileApplication xmi:type='uml:ProfileApplication' xmi:id='idl2xmi--profileApplication.ComponentIDL'>
       <appliedProfile href='https://www.omg.org/spec/CCCMP/20070501#EAPK_EF67E907_FC69_420a_9A9F_E206AAEDAD77'/>
     </profileApplication>
-    <profileApplication xmi:type='uml:ProfileApplication' xmi:id='idl2xmi-profileApplication__IDL4'>
+    <profileApplication xmi:type='uml:ProfileApplication' xmi:id='idl2xmi--profileApplication.IDL4'>
       <appliedProfile href='https://www.remedy.nl/idl2xmi/profile/IDL4/1.0'/>
     </profileApplication>
   </uml:Model>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__void' base_DataType='idl2xmi-CORBA__void'/>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__boolean' base_DataType='idl2xmi-CORBA__boolean'/>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__char' base_DataType='idl2xmi-CORBA__char'/>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__wchar' base_DataType='idl2xmi-CORBA__wchar'/>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__octet' base_DataType='idl2xmi-CORBA__octet'/>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__short' base_DataType='idl2xmi-CORBA__short'/>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__unsignedShort' base_DataType='idl2xmi-CORBA__unsignedShort'/>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__long' base_DataType='idl2xmi-CORBA__long'/>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__unsignedLong' base_DataType='idl2xmi-CORBA__unsignedLong'/>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__longLong' base_DataType='idl2xmi-CORBA__longLong'/>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__unsignedLongLong' base_DataType='idl2xmi-CORBA__unsignedLongLong'/>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__float' base_DataType='idl2xmi-CORBA__float'/>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__double' base_DataType='idl2xmi-CORBA__double'/>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__longDouble' base_DataType='idl2xmi-CORBA__longDouble'/>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__any' base_DataType='idl2xmi-CORBA__any'/>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__string' base_DataType='idl2xmi-CORBA__string'/>
-  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__wstring' base_DataType='idl2xmi-CORBA__wstring'/>
-  <BaseIDL:CORBAInterface xmi:id='idl2xmi-profile__BaseIDL__CORBAInterface__idl2xmi-CORBA__Object' base_Interface='idl2xmi-CORBA__Object' isLocal='false'/>
-  <BaseIDL:CORBAValue xmi:id='idl2xmi-profile__BaseIDL__CORBAValue__idl2xmi-CORBA__ValueBase' base_Interface='idl2xmi-CORBA__ValueBase' isCustom='false' isTruncatable='false'/>
-  <IDL4:Primitive xmi:id='idl2xmi-profile__IDL4__Primitive__idl2xmi-CORBA__int8' base_DataType='idl2xmi-CORBA__int8' idlName='int8'/>
-  <IDL4:Primitive xmi:id='idl2xmi-profile__IDL4__Primitive__idl2xmi-CORBA__uint8' base_DataType='idl2xmi-CORBA__uint8' idlName='uint8'/>
-  <BaseIDL:CORBAModule xmi:id='idl2xmi-profile__BaseIDL__CORBAModule__idl2xmi-Modern' base_Package='idl2xmi-Modern'/>
-  <BaseIDL:CORBAString xmi:id='idl2xmi-profile__BaseIDL__CORBAString__idl2xmi-Modern__Label' base_DataType='idl2xmi-Modern__Label' bound='32'/>
-  <BaseIDL:CORBAWstring xmi:id='idl2xmi-profile__BaseIDL__CORBAWstring__idl2xmi-Modern__WideLabel' base_DataType='idl2xmi-Modern__WideLabel' bound='16'/>
-  <BaseIDL:CORBASequence xmi:id='idl2xmi-profile__BaseIDL__CORBASequence__idl2xmi-Modern__Ints' base_DataType='idl2xmi-Modern__Ints' bound='3'/>
-  <BaseIDL:CORBASequence xmi:id='idl2xmi-profile__BaseIDL__CORBASequence__idl2xmi-Modern__Longs' base_DataType='idl2xmi-Modern__Longs'/>
-  <IDL4:Map xmi:id='idl2xmi-profile__IDL4__Map__idl2xmi-Modern__StringMap' base_DataType='idl2xmi-Modern__StringMap' keyType='idl2xmi-Modern__Label' valueType='idl2xmi-Modern__Ints' bound='8'/>
-  <IDL4:Map xmi:id='idl2xmi-profile__IDL4__Map__idl2xmi-Modern__IntegerMap' base_DataType='idl2xmi-Modern__IntegerMap' keyType='idl2xmi-CORBA__long' valueType='idl2xmi-CORBA__long'/>
-  <IDL4:AnnotationApplication xmi:id='idl2xmi-profile__IDL4__AnnotationApplication__idl2xmi-Modern__Values__annotation0' base_Comment='idl2xmi-Modern__Values__annotation0' name='marker' values=''/>
-  <IDL4:AnnotationApplication xmi:id='idl2xmi-profile__IDL4__AnnotationApplication__idl2xmi-Modern__Values__annotation1' base_Comment='idl2xmi-Modern__Values__annotation1' name='range' values='min=0;max=100'/>
-  <BaseIDL:CORBAStruct xmi:id='idl2xmi-profile__BaseIDL__CORBAStruct__idl2xmi-Modern__Values' base_DataType='idl2xmi-Modern__Values'/>
-  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-Modern__Values__tiny' base_Property='idl2xmi-Modern__Values__tiny' identifier='tiny'/>
-  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-Modern__Values__unsigned_tiny' base_Property='idl2xmi-Modern__Values__unsigned_tiny' identifier='unsigned_tiny'/>
-  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-Modern__Values__signed_short' base_Property='idl2xmi-Modern__Values__signed_short' identifier='signed_short'/>
-  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-Modern__Values__small' base_Property='idl2xmi-Modern__Values__small' identifier='small'/>
-  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-Modern__Values__signed_long' base_Property='idl2xmi-Modern__Values__signed_long' identifier='signed_long'/>
-  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-Modern__Values__unsigned_long' base_Property='idl2xmi-Modern__Values__unsigned_long' identifier='unsigned_long'/>
-  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-Modern__Values__signed_long_long' base_Property='idl2xmi-Modern__Values__signed_long_long' identifier='signed_long_long'/>
-  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-Modern__Values__unsigned_long_long' base_Property='idl2xmi-Modern__Values__unsigned_long_long' identifier='unsigned_long_long'/>
-  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-Modern__Values__lookup' base_Property='idl2xmi-Modern__Values__lookup' identifier='lookup'/>
-  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-Modern__Values__unbounded_lookup' base_Property='idl2xmi-Modern__Values__unbounded_lookup' identifier='unbounded_lookup'/>
-  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-Modern__Values__label_value' base_Property='idl2xmi-Modern__Values__label_value' identifier='label_value'/>
-  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-Modern__Values__wide_label' base_Property='idl2xmi-Modern__Values__wide_label' identifier='wide_label'/>
-  <IDL4:BitMask xmi:id='idl2xmi-profile__IDL4__BitMask__idl2xmi-Modern__Permissions' base_Enumeration='idl2xmi-Modern__Permissions' bitBound='3'/>
-  <IDL4:BitValue xmi:id='idl2xmi-profile__IDL4__BitValue__idl2xmi-Modern__Permissions__read' base_EnumerationLiteral='idl2xmi-Modern__Permissions__read' position='0'/>
-  <IDL4:BitValue xmi:id='idl2xmi-profile__IDL4__BitValue__idl2xmi-Modern__Permissions__write' base_EnumerationLiteral='idl2xmi-Modern__Permissions__write' position='1'/>
-  <IDL4:BitValue xmi:id='idl2xmi-profile__IDL4__BitValue__idl2xmi-Modern__Permissions__execute' base_EnumerationLiteral='idl2xmi-Modern__Permissions__execute' position='2'/>
-  <IDL4:BitSet xmi:id='idl2xmi-profile__IDL4__BitSet__idl2xmi-Modern__Header' base_DataType='idl2xmi-Modern__Header'/>
-  <IDL4:BitField xmi:id='idl2xmi-profile__IDL4__BitField__idl2xmi-Modern__Header__present' base_Property='idl2xmi-Modern__Header__present' bits='1'/>
-  <IDL4:BitField xmi:id='idl2xmi-profile__IDL4__BitField__idl2xmi-Modern__Header__flags' base_Property='idl2xmi-Modern__Header__flags' bits='7'/>
-  <IDL4:BitField xmi:id='idl2xmi-profile__IDL4__BitField__idl2xmi-Modern__Header__identifier' base_Property='idl2xmi-Modern__Header__identifier' bits='16'/>
-  <IDL4:BitSet xmi:id='idl2xmi-profile__IDL4__BitSet__idl2xmi-Modern__ExtendedHeader' base_DataType='idl2xmi-Modern__ExtendedHeader'/>
-  <IDL4:BitField xmi:id='idl2xmi-profile__IDL4__BitField__idl2xmi-Modern__ExtendedHeader__extension' base_Property='idl2xmi-Modern__ExtendedHeader__extension' bits='1'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.void--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.void'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.boolean--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.boolean'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.char--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.char'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.wchar--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.wchar'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.octet--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.octet'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.short--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.short'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.unsignedShort--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.unsignedShort'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.long--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.long'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.unsignedLong--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.unsignedLong'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.longLong--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.longLong'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.unsignedLongLong--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.unsignedLongLong'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.float--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.float'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.double--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.double'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.longDouble--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.longDouble'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.any--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.any'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.string--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.string'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.wstring--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.wstring'/>
+  <BaseIDL:CORBAInterface xmi:id='idl2xmi--CORBA.Object--BaseIDL--CORBAInterface' base_Interface='idl2xmi--CORBA.Object' isLocal='false'/>
+  <BaseIDL:CORBAValue xmi:id='idl2xmi--CORBA.ValueBase--BaseIDL--CORBAValue' base_Interface='idl2xmi--CORBA.ValueBase' isCustom='false' isTruncatable='false'/>
+  <IDL4:Primitive xmi:id='idl2xmi--CORBA.int8--IDL4--Primitive' base_DataType='idl2xmi--CORBA.int8' idlName='int8'/>
+  <IDL4:Primitive xmi:id='idl2xmi--CORBA.uint8--IDL4--Primitive' base_DataType='idl2xmi--CORBA.uint8' idlName='uint8'/>
+  <BaseIDL:CORBAModule xmi:id='idl2xmi-Modern--BaseIDL--CORBAModule' base_Package='idl2xmi-Modern'/>
+  <BaseIDL:CORBAString xmi:id='idl2xmi-Modern.Label--BaseIDL--CORBAString' base_DataType='idl2xmi-Modern.Label' bound='32'/>
+  <BaseIDL:CORBAWstring xmi:id='idl2xmi-Modern.WideLabel--BaseIDL--CORBAWstring' base_DataType='idl2xmi-Modern.WideLabel' bound='16'/>
+  <BaseIDL:CORBASequence xmi:id='idl2xmi-Modern.Ints--BaseIDL--CORBASequence' base_DataType='idl2xmi-Modern.Ints' bound='3'/>
+  <BaseIDL:CORBASequence xmi:id='idl2xmi-Modern.Longs--BaseIDL--CORBASequence' base_DataType='idl2xmi-Modern.Longs'/>
+  <IDL4:Map xmi:id='idl2xmi-Modern.StringMap--IDL4--Map' base_DataType='idl2xmi-Modern.StringMap' keyType='idl2xmi-Modern.Label' valueType='idl2xmi-Modern.Ints' bound='8'/>
+  <IDL4:Map xmi:id='idl2xmi-Modern.IntegerMap--IDL4--Map' base_DataType='idl2xmi-Modern.IntegerMap' keyType='idl2xmi--CORBA.long' valueType='idl2xmi--CORBA.long'/>
+  <IDL4:AnnotationApplication xmi:id='idl2xmi-Modern.Values--annotation0--IDL4--AnnotationApplication' base_Comment='idl2xmi-Modern.Values--annotation0' name='marker' values=''/>
+  <IDL4:AnnotationApplication xmi:id='idl2xmi-Modern.Values--annotation1--IDL4--AnnotationApplication' base_Comment='idl2xmi-Modern.Values--annotation1' name='range' values='min=0;max=100'/>
+  <BaseIDL:CORBAStruct xmi:id='idl2xmi-Modern.Values--BaseIDL--CORBAStruct' base_DataType='idl2xmi-Modern.Values'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-Modern.Values.tiny--BaseIDL--CORBAField' base_Property='idl2xmi-Modern.Values.tiny' identifier='tiny'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-Modern.Values.unsigned_tiny--BaseIDL--CORBAField' base_Property='idl2xmi-Modern.Values.unsigned_tiny' identifier='unsigned_tiny'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-Modern.Values.signed_short--BaseIDL--CORBAField' base_Property='idl2xmi-Modern.Values.signed_short' identifier='signed_short'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-Modern.Values.small--BaseIDL--CORBAField' base_Property='idl2xmi-Modern.Values.small' identifier='small'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-Modern.Values.signed_long--BaseIDL--CORBAField' base_Property='idl2xmi-Modern.Values.signed_long' identifier='signed_long'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-Modern.Values.unsigned_long--BaseIDL--CORBAField' base_Property='idl2xmi-Modern.Values.unsigned_long' identifier='unsigned_long'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-Modern.Values.signed_long_long--BaseIDL--CORBAField' base_Property='idl2xmi-Modern.Values.signed_long_long' identifier='signed_long_long'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-Modern.Values.unsigned_long_long--BaseIDL--CORBAField' base_Property='idl2xmi-Modern.Values.unsigned_long_long' identifier='unsigned_long_long'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-Modern.Values.lookup--BaseIDL--CORBAField' base_Property='idl2xmi-Modern.Values.lookup' identifier='lookup'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-Modern.Values.unbounded_lookup--BaseIDL--CORBAField' base_Property='idl2xmi-Modern.Values.unbounded_lookup' identifier='unbounded_lookup'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-Modern.Values.label_value--BaseIDL--CORBAField' base_Property='idl2xmi-Modern.Values.label_value' identifier='label_value'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-Modern.Values.wide_label--BaseIDL--CORBAField' base_Property='idl2xmi-Modern.Values.wide_label' identifier='wide_label'/>
+  <IDL4:BitMask xmi:id='idl2xmi-Modern.Permissions--IDL4--BitMask' base_Enumeration='idl2xmi-Modern.Permissions' bitBound='3'/>
+  <IDL4:BitValue xmi:id='idl2xmi-Modern.Permissions.read--IDL4--BitValue' base_EnumerationLiteral='idl2xmi-Modern.Permissions.read' position='0'/>
+  <IDL4:BitValue xmi:id='idl2xmi-Modern.Permissions.write--IDL4--BitValue' base_EnumerationLiteral='idl2xmi-Modern.Permissions.write' position='1'/>
+  <IDL4:BitValue xmi:id='idl2xmi-Modern.Permissions.execute--IDL4--BitValue' base_EnumerationLiteral='idl2xmi-Modern.Permissions.execute' position='2'/>
+  <IDL4:BitSet xmi:id='idl2xmi-Modern.Header--IDL4--BitSet' base_DataType='idl2xmi-Modern.Header'/>
+  <IDL4:BitField xmi:id='idl2xmi-Modern.Header.present--IDL4--BitField' base_Property='idl2xmi-Modern.Header.present' bits='1'/>
+  <IDL4:BitField xmi:id='idl2xmi-Modern.Header.flags--IDL4--BitField' base_Property='idl2xmi-Modern.Header.flags' bits='7'/>
+  <IDL4:BitField xmi:id='idl2xmi-Modern.Header.identifier--IDL4--BitField' base_Property='idl2xmi-Modern.Header.identifier' bits='16'/>
+  <IDL4:BitSet xmi:id='idl2xmi-Modern.ExtendedHeader--IDL4--BitSet' base_DataType='idl2xmi-Modern.ExtendedHeader'/>
+  <IDL4:BitField xmi:id='idl2xmi-Modern.ExtendedHeader.extension--IDL4--BitField' base_Property='idl2xmi-Modern.ExtendedHeader.extension' bits='1'/>
 </xmi:XMI>
