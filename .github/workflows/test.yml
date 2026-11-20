@@ -15,6 +15,9 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-24.04
+    # ruby-head is an early warning only; RIDL's optparse extension does not
+    # yet support Ruby head's OptionParser.
+    continue-on-error: ${{ matrix.ruby == 'head' }}
     strategy:
       fail-fast: false
       matrix:
