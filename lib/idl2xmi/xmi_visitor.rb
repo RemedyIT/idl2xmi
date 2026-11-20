@@ -362,6 +362,12 @@ module IDL
         unless node.raises.empty?
           operation.add_attribute('raisedException', node.raises.map { |exception| type_id(exception) }.join(' '))
         end
+        Array(node.context).each_with_index do |value, index|
+          context = REXML::Element.new('idl2xmi:context')
+          context.add_attribute('xmi:id', stable_id("#{node.scoped_name}::context#{index}"))
+          context.add_attribute('value', value.to_s)
+          operation.add_element(context)
+        end
         unless IDL::Type::Void === node.idltype
           result = REXML::Element.new('ownedParameter')
           result.add_attribute('xmi:type', 'uml:Parameter')
