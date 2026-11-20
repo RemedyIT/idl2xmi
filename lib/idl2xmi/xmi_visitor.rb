@@ -170,13 +170,11 @@ module IDL
       end
 
       def enter_home(node)
-        home = element('packagedElement', 'uml:Class', node)
+        home = element('packagedElement', standard? ? 'uml:Interface' : 'uml:Class', node)
         if standard?
-          apply_profile('ComponentIDL', 'CORBAHome', 'base_Class', home)
-          apply_profile('ComponentIDL', 'CORBAManages', 'base_Class', home,
-                        'component' => type_id(node.component))
-          apply_profile('ComponentIDL', 'CORBAPrimaryKey', 'base_Class', home,
-                        'type' => type_id(node.primarykey)) if node.primarykey
+          apply_profile('ComponentIDL', 'CORBAHome', 'base_Interface', home)
+          add_component_association(node, home, 'CORBAManages', node.component)
+          add_component_association(node, home, 'CORBAPrimaryKey', node.primarykey) if node.primarykey
         else
           home.add_attribute('idl2xmi:kind', 'home')
           home.add_attribute('idl2xmi:manages', type_id(node.component))
@@ -200,9 +198,22 @@ module IDL
         port.add_attribute('type', type_id(node.idltype))
         add_extension_attribute(port, 'kind', node.porttype.to_s)
         add_extension_attribute(port, 'multiple', node.multiple?.to_s)
-        apply_idl4_profile('Port', 'base_Port', port,
-                           'kind' => node.porttype.to_s,
-                           'multiple' => node.multiple?.to_s) if standard?
+        if standard?
+          classic_ports = {
+            'facet' => ['CORBAProvides', {}],
+            'receptacle' => ['CORBAUses', { 'multiple' => node.multiple?.to_s }],
+            'emitter' => ['CORBAEmits', {}],
+            'publisher' => ['CORBAPublishes', {}],
+            'consumer' => ['CORBAConsumes', {}]
+          }
+          if (mapping = classic_ports[node.porttype.to_s])
+            apply_profile('ComponentIDL', mapping[0], 'base_Port', port, mapping[1])
+          else
+            apply_idl4_profile('Port', 'base_Port', port,
+                               'kind' => node.porttype.to_s,
+                               'multiple' => node.multiple?.to_s)
+          end
+        end
         apply_annotations(port, node)
         current_container.add_element(port)
       end
@@ -221,8 +232,8 @@ module IDL
       def visit_valuebox(node)
         valuebox = element('packagedElement', 'uml:DataType', node)
         if standard?
-          apply_profile('BaseIDL', 'CORBABoxedValue', 'base_DataType', valuebox,
-                        'boxedType' => type_id(node.boxed_type))
+          add_generalization_to_type(valuebox, node.boxed_type, "#{node.scoped_name}::boxed")
+          apply_profile('BaseIDL', 'CORBABoxedValue', 'base_DataType', valuebox)
         else
           valuebox.add_attribute('idl2xmi:kind', 'valuebox')
           valuebox.add_attribute('idl2xmi:boxedType', idl_type_name(node.boxed_type))
@@ -262,7 +273,7 @@ module IDL
       end
 
       def declare_valuetype(node)
-        declare_classifier(node, 'uml:Class')
+        declare_classifier(node, standard? ? 'uml:Interface' : 'uml:Class')
       end
 
       def visit_factory(node)
@@ -319,7 +330,9 @@ module IDL
 
       def visit_enum(node)
         enumeration = element('packagedElement', 'uml:Enumeration', node)
-        apply_profile('BaseIDL', 'CORBAEnum', 'base_Enumeration', enumeration)
+        members = node.respond_to?(:enumerators) ? node.enumerators.map { |value| value.lm_name.to_s }.join(',') : ''
+        apply_profile('BaseIDL', 'CORBAEnum', 'base_Enumeration', enumeration,
+                      'members' => members)
         current_container.add_element(enumeration)
       end
 
@@ -700,18 +713,23 @@ module IDL
         type = node.idltype
         case type
         when IDL::Type::Array
-          add_generalization_to_type(alias_type, type.basetype, "#{node.scoped_name}::element")
+          add_template_members(alias_type, type.basetype, 1, 1, node.scoped_name)
           apply_profile('BaseIDL', 'CORBAArray', 'base_DataType', alias_type,
-                        'index' => type.sizes.map { |size| constant_value(size) }.join(' '))
+                        'index' => type.sizes.map { |size| constant_value(size) }.join(','))
         when IDL::Type::Sequence
-          add_generalization_to_type(alias_type, type.basetype, "#{node.scoped_name}::element")
+          upper = type.size ? constant_value(type.size).to_i - 1 : '*'
+          add_template_members(alias_type, type.basetype, 0, upper, node.scoped_name)
           tags = type.size ? { 'bound' => constant_value(type.size).to_s } : {}
           apply_profile('BaseIDL', 'CORBASequence', 'base_DataType', alias_type, tags)
         when IDL::Type::String, IDL::Type::WString
-          add_generalization_to_type(alias_type, type, "#{node.scoped_name}::element") unless type.size
-          stereotype = IDL::Type::String === type ? 'CORBAString' : 'CORBAWstring'
-          apply_profile('BaseIDL', stereotype, 'base_DataType', alias_type,
-                        'bound' => (constant_value(type.size).to_s if type.size))
+          if type.size
+            stereotype = IDL::Type::String === type ? 'CORBAString' : 'CORBAWstring'
+            apply_profile('BaseIDL', stereotype, 'base_DataType', alias_type,
+                          'bound' => constant_value(type.size).to_s)
+          else
+            add_generalization_to_type(alias_type, type, "#{node.scoped_name}::alias")
+            apply_profile('BaseIDL', 'CORBATypeDef', 'base_DataType', alias_type)
+          end
         when IDL::Type::Fixed
           apply_profile('BaseIDL', 'CORBAFixed', 'base_DataType', alias_type,
                         'digits' => type.digits.to_s, 'scale' => type.scale.to_s)
@@ -724,6 +742,34 @@ module IDL
           add_generalization_to_type(alias_type, type, "#{node.scoped_name}::alias")
           apply_profile('BaseIDL', 'CORBATypeDef', 'base_DataType', alias_type)
         end
+      end
+
+      def add_template_members(container, element_type, lower, upper, scope)
+        members = REXML::Element.new('ownedAttribute')
+        members.add_attribute('xmi:type', 'uml:Property')
+        members.add_attribute('xmi:id', stable_id("#{scope}::members"))
+        members.add_attribute('name', 'members')
+        members.add_attribute('type', type_id(element_type))
+        members.add_attribute('lower', lower.to_s)
+        members.add_attribute('upper', upper.to_s)
+        container.add_element(members)
+      end
+
+      def add_component_association(node, home, stereotype, target_type)
+        association = REXML::Element.new('packagedElement')
+        association.add_attribute('xmi:type', 'uml:Association')
+        association.add_attribute('xmi:id', stable_id("#{node.scoped_name}::#{stereotype}"))
+        association.add_attribute('name', stereotype)
+        [[home.attributes['xmi:id'], 'home'], [type_id(target_type), 'target']].each do |type, role|
+          owned_end = REXML::Element.new('ownedEnd')
+          owned_end.add_attribute('xmi:type', 'uml:Property')
+          owned_end.add_attribute('xmi:id', stable_id("#{node.scoped_name}::#{stereotype}::#{role}"))
+          owned_end.add_attribute('name', role)
+          owned_end.add_attribute('type', type)
+          association.add_element(owned_end)
+        end
+        current_container.add_element(association)
+        apply_profile('ComponentIDL', stereotype, 'base_Association', association)
       end
 
       def standard?
@@ -929,13 +975,14 @@ module IDL
           apply_profile('BaseIDL', 'CORBAFixed', 'base_DataType', classifier,
                         'digits' => type.digits.to_s, 'scale' => type.scale.to_s)
         when IDL::Type::Sequence
-          add_generalization_to_type(classifier, type.basetype, "#{signature}::element")
+          upper = type.size ? constant_value(type.size).to_i - 1 : '*'
+          add_template_members(classifier, type.basetype, 0, upper, signature)
           tags = type.size ? { 'bound' => constant_value(type.size).to_s } : {}
-          apply_profile('BaseIDL', 'CORBASequence', 'base_DataType', classifier, tags)
+          apply_profile('BaseIDL', 'CORBAAnonymousSequence', 'base_DataType', classifier, tags)
         when IDL::Type::Array
-          add_generalization_to_type(classifier, type.basetype, "#{signature}::element")
-          apply_profile('BaseIDL', 'CORBAArray', 'base_DataType', classifier,
-                        'index' => type.sizes.map { |size| constant_value(size) }.join(' '))
+          add_template_members(classifier, type.basetype, 1, 1, signature)
+          apply_profile('BaseIDL', 'CORBAAnonymousArray', 'base_DataType', classifier,
+                        'index' => type.sizes.map { |size| constant_value(size) }.join(','))
         when IDL::Type::Map
           apply_idl4_profile('Map', 'base_DataType', classifier,
                              'keyType' => standard_type_id(type.keytype),
@@ -988,8 +1035,15 @@ module IDL
         operation.add_attribute('xmi:id', stable_id(node.scoped_name))
         operation.add_attribute('name', node.lm_name.to_s)
         if standard?
-          stereotype = kind == 'finder' ? 'CORBAFinder' : 'CORBAValueFactory'
-          profile = kind == 'finder' ? 'ComponentIDL' : 'BaseIDL'
+          home_member = node.respond_to?(:enclosure) && IDL::AST::Home === node.enclosure
+          stereotype = if kind == 'finder'
+                         'CORBAFinder'
+                       elsif home_member
+                         'CORBAFactory'
+                       else
+                         'CORBAValueFactory'
+                       end
+          profile = home_member || kind == 'finder' ? 'ComponentIDL' : 'BaseIDL'
           apply_profile(profile, stereotype, 'base_Operation', operation)
         else
           operation.add_attribute('idl2xmi:kind', kind)
