@@ -1,9 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-legacy = ARGV.delete('--legacy')
 unless (1..2).cover?(ARGV.length)
-  warn "Usage: #{$PROGRAM_NAME} [--legacy] INPUT.idl [OUTPUT.xmi]"
+  warn "Usage: #{$PROGRAM_NAME} INPUT.idl [OUTPUT.xmi]"
   exit 2
 end
 
@@ -19,7 +18,7 @@ parser.parse(File.read(input_path))
 
 output = output_path ? File.open(output_path, 'w') : $stdout
 begin
-  parser.visit_nodes(IDL::Idl2xmi::XmiVisitor.new(output, standard: !legacy))
+  parser.visit_nodes(IDL::Idl2xmi::XmiVisitor.new(output))
 ensure
   output.close if output_path && !output.closed?
 end
