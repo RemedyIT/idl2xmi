@@ -2,6 +2,8 @@
   <uml:Model xmi:id='idl2xmi-model' name='IDL model'>
     <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-Control' name='Control' isAbstract='false' idl2xmi:local='false' idl2xmi:pseudo='false'>
       <ownedOperation xmi:type='uml:Operation' xmi:id='idl2xmi-Control__start' name='start'>
+        <idl2xmi:context xmi:id='idl2xmi-Control__start__context0' value='region'/>
+        <idl2xmi:context xmi:id='idl2xmi-Control__start__context1' value='trace-id'/>
         <ownedParameter xmi:type='uml:Parameter' type='int32_t' xmi:id='idl2xmi-Control__start__id' name='id' direction='in'/>
       </ownedOperation>
     </packagedElement>
@@ -36,8 +38,10 @@
       <ownedPort xmi:type='uml:Port' type='idl2xmi-ControlPorts' xmi:id='idl2xmi-Worker__mirrored_port_group' name='mirrored_port_group' idl2xmi:kind='mirrorport' idl2xmi:multiple='false'/>
       <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-Worker__count' name='count' isReadOnly='false'/>
     </packagedElement>
-    <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-WorkerId' name='WorkerId' idl2xmi:kind='typedef' idl2xmi:aliasedType='int32_t'/>
-    <packagedElement xmi:type='uml:Class' xmi:id='idl2xmi-WorkerHome' name='WorkerHome' idl2xmi:kind='home' idl2xmi:manages='idl2xmi-Worker'>
+    <packagedElement xmi:type='uml:Class' xmi:id='idl2xmi-WorkerId' name='WorkerId' isAbstract='false' idl2xmi:kind='valuetype' idl2xmi:custom='false' idl2xmi:truncatable='false'>
+      <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-WorkerId__value' name='value' idl2xmi:visibility='public'/>
+    </packagedElement>
+    <packagedElement xmi:type='uml:Class' xmi:id='idl2xmi-WorkerHome' name='WorkerHome' idl2xmi:kind='home' idl2xmi:manages='idl2xmi-Worker' idl2xmi:primaryKey='idl2xmi-WorkerId'>
       <ownedOperation xmi:type='uml:Operation' xmi:id='idl2xmi-WorkerHome__create' name='create' idl2xmi:kind='factory'>
         <ownedParameter xmi:type='uml:Parameter' type='int32_t' xmi:id='idl2xmi-WorkerHome__create__id' name='id' direction='in'/>
       </ownedOperation>
