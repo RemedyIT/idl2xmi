@@ -51,7 +51,8 @@ bundle exec ruby script/update_golden.rb
 - Constants become static, read-only UML properties. Interfaces become UML
   interfaces with generalizations, operations, parameters, and attributes.
 - Exceptions become UML `DataType` classifiers. Operation `raises` references
-  use UML's `raisedException`; attribute `getraises` and `setraises` are kept
+  use UML's `raisedException`; operation context strings are retained as
+  `idl2xmi:context` elements. Attribute `getraises` and `setraises` are kept
   as `idl2xmi` profile attributes.
 - Fixed-size IDL arrays use nested `std::array` type names.
 - Basic IDL types use TAOX11 `cxx_type` spellings. RIDL master does not load
@@ -67,7 +68,8 @@ bundle exec ruby script/update_golden.rb
   bitset fields are represented as enumeration literals and properties.
 - IDL3 valuetypes, eventtypes, valueboxes, components, connectors, homes,
   ports, and porttypes are represented as UML classifiers and operations with
-  IDL-specific profile attributes. Template modules retain their signature,
+  IDL-specific profile attributes; homes retain their managed component and
+  primary-key type. Template modules retain their signature,
   and instantiated modules retain their template and argument references.
 - RIDL annotations are retained as nested `idl2xmi:annotation` elements.
 
