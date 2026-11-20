@@ -1,10 +1,11 @@
 # idl2xmi
 
-A RIDL backend for exporting CORBA IDL declarations as UML XMI.
+A RIDL backend for exporting CORBA IDL declarations as OMG UML XMI.
 
 The backend registers as `:idl2xmi` and walks the RIDL AST with IDL version 4
-enabled. It maps the RIDL IDL 4 declaration and type nodes to UML XMI, using
-`idl2xmi` profile data where UML has no direct representation.
+enabled. By default it applies the OMG UML Profile for CORBA and CORBA
+Components (CCCMP) 1.0. IDL 4 constructs absent from CCCMP are kept in a
+separate `IDL4` extension profile so that non-standard mappings are explicit.
 
 ## Requirements
 
@@ -25,6 +26,12 @@ Run the generator on an IDL file:
 bundle exec ruby script/idl2xmi.rb examples/basic.idl output.xmi
 ```
 
+The former tool-specific format remains available during migration:
+
+```sh
+bundle exec ruby script/idl2xmi.rb --legacy examples/basic.idl output.xmi
+```
+
 ## Test
 
 ```sh
@@ -43,7 +50,19 @@ Regenerate all committed golden files with the backend itself:
 bundle exec ruby script/update_golden.rb
 ```
 
-## Current mapping
+## Standards mapping
+
+- The UML model is serialized as XMI 2.5.1.
+- Classic CORBA IDL uses the normative CCCMP `BaseIDL` profile.
+- CORBA Component Model declarations use CCCMP `ComponentIDL` where defined.
+- UML `type` attributes reference UML classifiers. A `CORBA` package contains
+  the CCCMP primitive `DataType` classifiers; C++ spellings are not used as
+  model type identities.
+- IDL 4 constructs missing from CCCMP use only the separate `IDL4` namespace.
+  The complete gap analysis and proposed OMG resolution is in
+  [docs/omg-idl4-xmi-proposal.md](docs/omg-idl4-xmi-proposal.md).
+
+## Legacy mapping
 
 - IDL `struct` declarations become UML `DataType` classifiers.
 - Modules become UML `Package` elements, and structs become UML `DataType`
@@ -73,6 +92,6 @@ bundle exec ruby script/update_golden.rb
   and instantiated modules retain their template and argument references.
 - RIDL annotations are retained as nested `idl2xmi:annotation` elements.
 
-The output is an IDL-to-XMI interchange mapping, not a UML profile that makes
-all IDL semantics executable in a UML tool. The supported declarations and
-types are covered by recursive IDL fixtures and committed XMI goldens.
+The legacy output is covered by recursive IDL fixtures and committed XMI
+goldens. Separate semantic tests verify the CCCMP stereotype applications,
+classifier type references, union mapping, and isolation of IDL 4 extensions.
