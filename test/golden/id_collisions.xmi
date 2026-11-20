@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20131001' xmlns:uml='http://www.omg.org/spec/UML/20161101' xmlns:BaseIDL='https://www.omg.org/spec/CCCMP/20070501/BaseIDL' xmlns:ComponentIDL='https://www.omg.org/spec/CCCMP/20070501/ComponentIDL' xmlns:IDL4='https://www.remedy.nl/idl2xmi/profile/IDL4/1.0' xmi:version='2.5.1'>
+  <uml:Model xmi:id='idl2xmi--model' name='IDL model'>
+    <packagedElement xmi:type='uml:Package' xmi:id='idl2xmi--CORBA' name='CORBA'>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.void' name='void'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.boolean' name='boolean'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.char' name='char'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.wchar' name='wchar'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.octet' name='octet'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.short' name='short'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.unsignedShort' name='unsignedShort'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.long' name='long'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.unsignedLong' name='unsignedLong'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.longLong' name='longLong'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.unsignedLongLong' name='unsignedLongLong'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.float' name='float'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.double' name='double'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.longDouble' name='longDouble'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.any' name='any'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.string' name='string'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.wstring' name='wstring'/>
+      <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi--CORBA.Object' name='Object'/>
+      <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi--CORBA.ValueBase' name='ValueBase'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.int8' name='int8'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi--CORBA.uint8' name='uint8'/>
+    </packagedElement>
+    <packagedElement xmi:type='uml:Package' xmi:id='idl2xmi-CORBA' name='CORBA'>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA.long_holder' name='long_holder'>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.long' xmi:id='idl2xmi-CORBA.long_holder.value' name='value' isOrdered='true'/>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type='uml:Package' xmi:id='idl2xmi-a' name='a'>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-a.b' name='b'>
+        <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.long' xmi:id='idl2xmi-a.b.x' name='x' isOrdered='true'/>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-a__b' name='a__b'>
+      <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.long' xmi:id='idl2xmi-a__b.y' name='y' isOrdered='true'/>
+    </packagedElement>
+    <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Choice' name='Choice'>
+      <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.long' xmi:id='idl2xmi-Choice--discriminator' name='discriminator' isOrdered='true'/>
+      <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.long' xmi:id='idl2xmi-Choice.discriminator' name='discriminator' isOrdered='true'/>
+      <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.short' xmi:id='idl2xmi-Choice.other' name='other' isOrdered='true'/>
+    </packagedElement>
+    <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-Ops' name='Ops' isAbstract='false'>
+      <ownedOperation xmi:type='uml:Operation' xmi:id='idl2xmi-Ops.annotated' name='annotated'>
+        <ownedParameter xmi:type='uml:Parameter' type='idl2xmi--CORBA.long' xmi:id='idl2xmi-Ops.annotated--return' name='return' direction='return'/>
+        <ownedParameter xmi:type='uml:Parameter' type='idl2xmi--CORBA.long' xmi:id='idl2xmi-Ops.annotated.return' name='return' direction='in'/>
+        <ownedComment xmi:type='uml:Comment' xmi:id='idl2xmi-Ops.annotated--annotation0' annotatedElement='idl2xmi-Ops.annotated'>
+          <body>@deprecated()</body>
+        </ownedComment>
+      </ownedOperation>
+    </packagedElement>
+    <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-ThreeLongs' name='ThreeLongs'>
+      <ownedAttribute xmi:type='uml:Property' type='idl2xmi--CORBA.long' xmi:id='idl2xmi-ThreeLongs--members' name='members' lower='0' upper='3'/>
+    </packagedElement>
+    <profileApplication xmi:type='uml:ProfileApplication' xmi:id='idl2xmi--profileApplication.BaseIDL'>
+      <appliedProfile href='https://www.omg.org/spec/CCCMP/20070501#EAPK_C6301B3D_712C_46e5_827E_8DEE3343B2E7'/>
+    </profileApplication>
+    <profileApplication xmi:type='uml:ProfileApplication' xmi:id='idl2xmi--profileApplication.ComponentIDL'>
+      <appliedProfile href='https://www.omg.org/spec/CCCMP/20070501#EAPK_EF67E907_FC69_420a_9A9F_E206AAEDAD77'/>
+    </profileApplication>
+    <profileApplication xmi:type='uml:ProfileApplication' xmi:id='idl2xmi--profileApplication.IDL4'>
+      <appliedProfile href='https://www.remedy.nl/idl2xmi/profile/IDL4/1.0'/>
+    </profileApplication>
+  </uml:Model>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.void--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.void'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.boolean--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.boolean'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.char--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.char'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.wchar--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.wchar'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.octet--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.octet'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.short--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.short'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.unsignedShort--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.unsignedShort'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.long--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.long'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.unsignedLong--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.unsignedLong'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.longLong--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.longLong'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.unsignedLongLong--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.unsignedLongLong'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.float--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.float'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.double--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.double'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.longDouble--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.longDouble'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.any--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.any'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.string--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.string'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi--CORBA.wstring--BaseIDL--CORBAPrimitive' base_DataType='idl2xmi--CORBA.wstring'/>
+  <BaseIDL:CORBAInterface xmi:id='idl2xmi--CORBA.Object--BaseIDL--CORBAInterface' base_Interface='idl2xmi--CORBA.Object' isLocal='false'/>
+  <BaseIDL:CORBAValue xmi:id='idl2xmi--CORBA.ValueBase--BaseIDL--CORBAValue' base_Interface='idl2xmi--CORBA.ValueBase' isCustom='false' isTruncatable='false'/>
+  <IDL4:Primitive xmi:id='idl2xmi--CORBA.int8--IDL4--Primitive' base_DataType='idl2xmi--CORBA.int8' idlName='int8'/>
+  <IDL4:Primitive xmi:id='idl2xmi--CORBA.uint8--IDL4--Primitive' base_DataType='idl2xmi--CORBA.uint8' idlName='uint8'/>
+  <BaseIDL:CORBAModule xmi:id='idl2xmi-CORBA--BaseIDL--CORBAModule' base_Package='idl2xmi-CORBA'/>
+  <BaseIDL:CORBAStruct xmi:id='idl2xmi-CORBA.long_holder--BaseIDL--CORBAStruct' base_DataType='idl2xmi-CORBA.long_holder'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-CORBA.long_holder.value--BaseIDL--CORBAField' base_Property='idl2xmi-CORBA.long_holder.value' identifier='value'/>
+  <BaseIDL:CORBAModule xmi:id='idl2xmi-a--BaseIDL--CORBAModule' base_Package='idl2xmi-a'/>
+  <BaseIDL:CORBAStruct xmi:id='idl2xmi-a.b--BaseIDL--CORBAStruct' base_DataType='idl2xmi-a.b'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-a.b.x--BaseIDL--CORBAField' base_Property='idl2xmi-a.b.x' identifier='x'/>
+  <BaseIDL:CORBAStruct xmi:id='idl2xmi-a__b--BaseIDL--CORBAStruct' base_DataType='idl2xmi-a__b'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-a__b.y--BaseIDL--CORBAField' base_Property='idl2xmi-a__b.y' identifier='y'/>
+  <BaseIDL:CORBAUnion xmi:id='idl2xmi-Choice--BaseIDL--CORBAUnion' base_DataType='idl2xmi-Choice'/>
+  <BaseIDL:CORBASwitch xmi:id='idl2xmi-Choice--discriminator--BaseIDL--CORBASwitch' base_Property='idl2xmi-Choice--discriminator'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-Choice.discriminator--BaseIDL--CORBAField' base_Property='idl2xmi-Choice.discriminator' identifier='discriminator'/>
+  <BaseIDL:CORBACase xmi:id='idl2xmi-Choice.discriminator--BaseIDL--CORBACase' base_Property='idl2xmi-Choice.discriminator' label='1'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-Choice.other--BaseIDL--CORBAField' base_Property='idl2xmi-Choice.other' identifier='other'/>
+  <BaseIDL:CORBADefault xmi:id='idl2xmi-Choice.other--BaseIDL--CORBADefault' base_Property='idl2xmi-Choice.other'/>
+  <BaseIDL:CORBAInterface xmi:id='idl2xmi-Ops--BaseIDL--CORBAInterface' base_Interface='idl2xmi-Ops' isLocal='false'/>
+  <IDL4:AnnotationApplication xmi:id='idl2xmi-Ops.annotated--annotation0--IDL4--AnnotationApplication' base_Comment='idl2xmi-Ops.annotated--annotation0' name='deprecated' values=''/>
+  <BaseIDL:CORBASequence xmi:id='idl2xmi-ThreeLongs--BaseIDL--CORBASequence' base_DataType='idl2xmi-ThreeLongs' bound='3'/>
+</xmi:XMI>
