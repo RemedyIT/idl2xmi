@@ -33,7 +33,7 @@ class GoldenXmiTest < Minitest::Test
       generated = File.join(dir, relative_path.sub(/\.idl\z/, '.xmi'))
       FileUtils.mkdir_p(File.dirname(generated))
       _stdout, stderr, status = Open3.capture3(
-        RbConfig.ruby, script, input, generated
+        RbConfig.ruby, script, '--legacy', input, generated
       )
 
       assert status.success?, "generator failed for #{relative_path}: #{stderr}"
