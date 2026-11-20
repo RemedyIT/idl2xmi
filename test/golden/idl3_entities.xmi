@@ -1,66 +1,174 @@
-<xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20131001' xmlns:uml='http://www.omg.org/spec/UML/20161101' xmlns:idl2xmi='https://github.com/jwillemsen/idl2xmi/profile' xmi:version='2.5.1'>
+<xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20131001' xmlns:uml='http://www.omg.org/spec/UML/20161101' xmlns:BaseIDL='https://www.omg.org/spec/CCCMP/20070501/BaseIDL' xmlns:ComponentIDL='https://www.omg.org/spec/CCCMP/20070501/ComponentIDL' xmlns:IDL4='https://www.remedy.nl/idl2xmi/profile/IDL4/1.0' xmi:version='2.5.1'>
   <uml:Model xmi:id='idl2xmi-model' name='IDL model'>
-    <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-Control' name='Control' isAbstract='false' idl2xmi:local='false' idl2xmi:pseudo='false'>
+    <packagedElement xmi:type='uml:Package' xmi:id='idl2xmi-CORBA' name='CORBA'>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__void' name='void'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__boolean' name='boolean'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__char' name='char'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__wchar' name='wchar'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__octet' name='octet'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__short' name='short'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__unsignedShort' name='unsignedShort'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__long' name='long'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__unsignedLong' name='unsignedLong'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__longLong' name='longLong'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__unsignedLongLong' name='unsignedLongLong'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__float' name='float'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__double' name='double'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__longDouble' name='longDouble'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__any' name='any'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__string' name='string'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__wstring' name='wstring'/>
+      <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-CORBA__Object' name='Object'/>
+      <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-CORBA__ValueBase' name='ValueBase'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__int8' name='int8'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__uint8' name='uint8'/>
+    </packagedElement>
+    <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-Control' name='Control' isAbstract='false'>
       <ownedOperation xmi:type='uml:Operation' xmi:id='idl2xmi-Control__start' name='start'>
-        <idl2xmi:context xmi:id='idl2xmi-Control__start__context0' value='region'/>
-        <idl2xmi:context xmi:id='idl2xmi-Control__start__context1' value='trace-id'/>
-        <ownedParameter xmi:type='uml:Parameter' type='int32_t' xmi:id='idl2xmi-Control__start__id' name='id' direction='in'/>
+        <ownedParameter xmi:type='uml:Parameter' type='idl2xmi-CORBA__long' xmi:id='idl2xmi-Control__start__id' name='id' direction='in'/>
       </ownedOperation>
     </packagedElement>
-    <packagedElement xmi:type='uml:Class' xmi:id='idl2xmi-BaseRecord' name='BaseRecord' isAbstract='false' idl2xmi:kind='valuetype' idl2xmi:custom='false' idl2xmi:truncatable='false'>
-      <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-BaseRecord__key' name='key' idl2xmi:visibility='public'/>
+    <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-BaseRecord' name='BaseRecord' isAbstract='false'>
+      <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__long' xmi:id='idl2xmi-BaseRecord__key' name='key' isOrdered='true'/>
     </packagedElement>
-    <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Failure' name='Failure' idl2xmi:kind='exception'>
-      <ownedAttribute xmi:type='uml:Property' type='std::string' xmi:id='idl2xmi-Failure__reason' name='reason'/>
+    <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Failure' name='Failure'>
+      <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__string' xmi:id='idl2xmi-Failure__reason' name='reason' isOrdered='true'/>
     </packagedElement>
-    <packagedElement xmi:type='uml:Class' xmi:id='idl2xmi-Record' name='Record' isAbstract='false' idl2xmi:kind='valuetype' idl2xmi:custom='false' idl2xmi:truncatable='true' idl2xmi:supports='idl2xmi-Control'>
+    <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-Record' name='Record' isAbstract='false'>
       <generalization xmi:type='uml:Generalization' xmi:id='idl2xmi-Record__BaseRecord' general='idl2xmi-BaseRecord'/>
-      <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-Record__id' name='id' idl2xmi:visibility='public'/>
-      <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-Record__label' name='label' idl2xmi:visibility='private'/>
+      <generalization xmi:type='uml:Generalization' xmi:id='idl2xmi-idl2xmi-Record__supports__0' general='idl2xmi-Control'/>
+      <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__long' xmi:id='idl2xmi-Record__id' name='id' isOrdered='true'/>
+      <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__long' xmi:id='idl2xmi-Record__label' name='label' isOrdered='true'/>
       <ownedOperation xmi:type='uml:Operation' xmi:id='idl2xmi-Record__value' name='value'>
-        <ownedParameter xmi:type='uml:Parameter' type='int32_t' xmi:id='idl2xmi-Record__value__return' name='return' direction='return'/>
+        <ownedParameter xmi:type='uml:Parameter' type='idl2xmi-CORBA__long' xmi:id='idl2xmi-Record__value__return' name='return' direction='return'/>
       </ownedOperation>
-      <ownedOperation xmi:type='uml:Operation' xmi:id='idl2xmi-Record__create' name='create' idl2xmi:kind='factory' raisedException='idl2xmi-Failure'>
-        <ownedParameter xmi:type='uml:Parameter' type='int32_t' xmi:id='idl2xmi-Record__create__id' name='id' direction='in'/>
-      </ownedOperation>
-    </packagedElement>
-    <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-RecordBox' name='RecordBox' idl2xmi:kind='valuebox' idl2xmi:boxedType='int32_t'/>
-    <packagedElement xmi:type='uml:Class' xmi:id='idl2xmi-Changed' name='Changed' isAbstract='false' idl2xmi:kind='eventtype' idl2xmi:custom='false' idl2xmi:truncatable='false'>
-      <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-Changed__value' name='value' idl2xmi:visibility='public'/>
-    </packagedElement>
-    <packagedElement xmi:type='uml:Component' xmi:id='idl2xmi-Worker' name='Worker' idl2xmi:kind='component' idl2xmi:supports='idl2xmi-Control'>
-      <ownedPort xmi:type='uml:Port' type='idl2xmi-Control' xmi:id='idl2xmi-Worker__endpoint' name='endpoint' idl2xmi:kind='facet' idl2xmi:multiple='false'/>
-      <ownedPort xmi:type='uml:Port' type='idl2xmi-Control' xmi:id='idl2xmi-Worker__peers' name='peers' idl2xmi:kind='receptacle' idl2xmi:multiple='true'/>
-      <ownedPort xmi:type='uml:Port' type='idl2xmi-Changed' xmi:id='idl2xmi-Worker__event_source' name='event_source' idl2xmi:kind='emitter' idl2xmi:multiple='false'/>
-      <ownedPort xmi:type='uml:Port' type='idl2xmi-Changed' xmi:id='idl2xmi-Worker__event_stream' name='event_stream' idl2xmi:kind='publisher' idl2xmi:multiple='false'/>
-      <ownedPort xmi:type='uml:Port' type='idl2xmi-Changed' xmi:id='idl2xmi-Worker__event_sink' name='event_sink' idl2xmi:kind='consumer' idl2xmi:multiple='false'/>
-      <ownedPort xmi:type='uml:Port' type='idl2xmi-ControlPorts' xmi:id='idl2xmi-Worker__port_group' name='port_group' idl2xmi:kind='port' idl2xmi:multiple='false'/>
-      <ownedPort xmi:type='uml:Port' type='idl2xmi-ControlPorts' xmi:id='idl2xmi-Worker__mirrored_port_group' name='mirrored_port_group' idl2xmi:kind='mirrorport' idl2xmi:multiple='false'/>
-      <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-Worker__count' name='count' isReadOnly='false'/>
-    </packagedElement>
-    <packagedElement xmi:type='uml:Class' xmi:id='idl2xmi-WorkerId' name='WorkerId' isAbstract='false' idl2xmi:kind='valuetype' idl2xmi:custom='false' idl2xmi:truncatable='false'>
-      <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-WorkerId__value' name='value' idl2xmi:visibility='public'/>
-    </packagedElement>
-    <packagedElement xmi:type='uml:Class' xmi:id='idl2xmi-WorkerHome' name='WorkerHome' idl2xmi:kind='home' idl2xmi:manages='idl2xmi-Worker' idl2xmi:primaryKey='idl2xmi-WorkerId'>
-      <ownedOperation xmi:type='uml:Operation' xmi:id='idl2xmi-WorkerHome__create' name='create' idl2xmi:kind='factory'>
-        <ownedParameter xmi:type='uml:Parameter' type='int32_t' xmi:id='idl2xmi-WorkerHome__create__id' name='id' direction='in'/>
-      </ownedOperation>
-      <ownedOperation xmi:type='uml:Operation' xmi:id='idl2xmi-WorkerHome__find' name='find' idl2xmi:kind='finder' raisedException='idl2xmi-Failure'>
-        <ownedParameter xmi:type='uml:Parameter' type='int32_t' xmi:id='idl2xmi-WorkerHome__find__id' name='id' direction='in'/>
+      <ownedOperation xmi:type='uml:Operation' xmi:id='idl2xmi-Record__create' name='create' raisedException='idl2xmi-Failure'>
+        <ownedParameter xmi:type='uml:Parameter' type='idl2xmi-CORBA__long' xmi:id='idl2xmi-Record__create__id' name='id' direction='in'/>
       </ownedOperation>
     </packagedElement>
-    <packagedElement xmi:type='uml:Component' xmi:id='idl2xmi-BaseConnector' name='BaseConnector' idl2xmi:kind='connector'/>
-    <packagedElement xmi:type='uml:Component' xmi:id='idl2xmi-LoggingConnector' name='LoggingConnector' idl2xmi:kind='connector'>
+    <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-RecordBox' name='RecordBox'>
+      <generalization xmi:type='uml:Generalization' xmi:id='idl2xmi-RecordBox__boxed' general='idl2xmi-CORBA__long'/>
+    </packagedElement>
+    <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-Changed' name='Changed' isAbstract='false'>
+      <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__long' xmi:id='idl2xmi-Changed__value' name='value' isOrdered='true'/>
+    </packagedElement>
+    <packagedElement xmi:type='uml:Class' xmi:id='idl2xmi-Worker' name='Worker'>
+      <generalization xmi:type='uml:Generalization' xmi:id='idl2xmi-idl2xmi-Worker__supports__0' general='idl2xmi-Control'/>
+      <ownedPort xmi:type='uml:Port' type='idl2xmi-Control' xmi:id='idl2xmi-Worker__endpoint' name='endpoint'/>
+      <ownedPort xmi:type='uml:Port' type='idl2xmi-Control' xmi:id='idl2xmi-Worker__peers' name='peers'/>
+      <ownedPort xmi:type='uml:Port' type='idl2xmi-Changed' xmi:id='idl2xmi-Worker__event_source' name='event_source'/>
+      <ownedPort xmi:type='uml:Port' type='idl2xmi-Changed' xmi:id='idl2xmi-Worker__event_stream' name='event_stream'/>
+      <ownedPort xmi:type='uml:Port' type='idl2xmi-Changed' xmi:id='idl2xmi-Worker__event_sink' name='event_sink'/>
+      <ownedPort xmi:type='uml:Port' type='idl2xmi-ControlPorts' xmi:id='idl2xmi-Worker__port_group' name='port_group'/>
+      <ownedPort xmi:type='uml:Port' type='idl2xmi-ControlPorts' xmi:id='idl2xmi-Worker__mirrored_port_group' name='mirrored_port_group'/>
+      <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__long' xmi:id='idl2xmi-Worker__count' name='count' isReadOnly='false'/>
+    </packagedElement>
+    <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-WorkerId' name='WorkerId' isAbstract='false'>
+      <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__long' xmi:id='idl2xmi-WorkerId__value' name='value' isOrdered='true'/>
+    </packagedElement>
+    <packagedElement xmi:type='uml:Association' xmi:id='idl2xmi-WorkerHome__CORBAManages' name='CORBAManages'>
+      <ownedEnd xmi:type='uml:Property' type='idl2xmi-WorkerHome' xmi:id='idl2xmi-WorkerHome__CORBAManages__home' name='home'/>
+      <ownedEnd xmi:type='uml:Property' type='idl2xmi-Worker' xmi:id='idl2xmi-WorkerHome__CORBAManages__target' name='target'/>
+    </packagedElement>
+    <packagedElement xmi:type='uml:Association' xmi:id='idl2xmi-WorkerHome__CORBAPrimaryKey' name='CORBAPrimaryKey'>
+      <ownedEnd xmi:type='uml:Property' type='idl2xmi-WorkerHome' xmi:id='idl2xmi-WorkerHome__CORBAPrimaryKey__home' name='home'/>
+      <ownedEnd xmi:type='uml:Property' type='idl2xmi-WorkerId' xmi:id='idl2xmi-WorkerHome__CORBAPrimaryKey__target' name='target'/>
+    </packagedElement>
+    <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-WorkerHome' name='WorkerHome'>
+      <ownedOperation xmi:type='uml:Operation' xmi:id='idl2xmi-WorkerHome__create' name='create'>
+        <ownedParameter xmi:type='uml:Parameter' type='idl2xmi-CORBA__long' xmi:id='idl2xmi-WorkerHome__create__id' name='id' direction='in'/>
+      </ownedOperation>
+      <ownedOperation xmi:type='uml:Operation' xmi:id='idl2xmi-WorkerHome__find' name='find' raisedException='idl2xmi-Failure'>
+        <ownedParameter xmi:type='uml:Parameter' type='idl2xmi-CORBA__long' xmi:id='idl2xmi-WorkerHome__find__id' name='id' direction='in'/>
+      </ownedOperation>
+    </packagedElement>
+    <packagedElement xmi:type='uml:Component' xmi:id='idl2xmi-BaseConnector' name='BaseConnector'/>
+    <packagedElement xmi:type='uml:Component' xmi:id='idl2xmi-LoggingConnector' name='LoggingConnector'>
       <generalization xmi:type='uml:Generalization' xmi:id='idl2xmi-LoggingConnector__BaseConnector' general='idl2xmi-BaseConnector'/>
-      <ownedPort xmi:type='uml:Port' type='idl2xmi-Control' xmi:id='idl2xmi-LoggingConnector__facet' name='facet' idl2xmi:kind='facet' idl2xmi:multiple='false'/>
-      <ownedPort xmi:type='uml:Port' type='idl2xmi-Control' xmi:id='idl2xmi-LoggingConnector__subscribers' name='subscribers' idl2xmi:kind='receptacle' idl2xmi:multiple='true'/>
-      <ownedPort xmi:type='uml:Port' type='idl2xmi-ControlPorts' xmi:id='idl2xmi-LoggingConnector__port_group' name='port_group' idl2xmi:kind='port' idl2xmi:multiple='false'/>
-      <ownedPort xmi:type='uml:Port' type='idl2xmi-ControlPorts' xmi:id='idl2xmi-LoggingConnector__mirrored_port_group' name='mirrored_port_group' idl2xmi:kind='mirrorport' idl2xmi:multiple='false'/>
+      <ownedPort xmi:type='uml:Port' type='idl2xmi-Control' xmi:id='idl2xmi-LoggingConnector__facet' name='facet'/>
+      <ownedPort xmi:type='uml:Port' type='idl2xmi-Control' xmi:id='idl2xmi-LoggingConnector__subscribers' name='subscribers'/>
+      <ownedPort xmi:type='uml:Port' type='idl2xmi-ControlPorts' xmi:id='idl2xmi-LoggingConnector__port_group' name='port_group'/>
+      <ownedPort xmi:type='uml:Port' type='idl2xmi-ControlPorts' xmi:id='idl2xmi-LoggingConnector__mirrored_port_group' name='mirrored_port_group'/>
     </packagedElement>
-    <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-ControlPorts' name='ControlPorts' idl2xmi:kind='porttype'>
-      <ownedPort xmi:type='uml:Port' type='idl2xmi-Control' xmi:id='idl2xmi-ControlPorts__endpoint' name='endpoint' idl2xmi:kind='facet' idl2xmi:multiple='false'/>
-      <ownedPort xmi:type='uml:Port' type='idl2xmi-Control' xmi:id='idl2xmi-ControlPorts__observers' name='observers' idl2xmi:kind='receptacle' idl2xmi:multiple='true'/>
-      <ownedAttribute xmi:type='uml:Property' type='int32_t' xmi:id='idl2xmi-ControlPorts__count' name='count' isReadOnly='false'/>
+    <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-ControlPorts' name='ControlPorts'>
+      <ownedPort xmi:type='uml:Port' type='idl2xmi-Control' xmi:id='idl2xmi-ControlPorts__endpoint' name='endpoint'/>
+      <ownedPort xmi:type='uml:Port' type='idl2xmi-Control' xmi:id='idl2xmi-ControlPorts__observers' name='observers'/>
+      <ownedAttribute xmi:type='uml:Property' type='idl2xmi-CORBA__long' xmi:id='idl2xmi-ControlPorts__count' name='count' isReadOnly='false'/>
     </packagedElement>
+    <profileApplication xmi:type='uml:ProfileApplication' xmi:id='idl2xmi-profileApplication__BaseIDL'>
+      <appliedProfile href='https://www.omg.org/spec/CCCMP/20070501#EAPK_C6301B3D_712C_46e5_827E_8DEE3343B2E7'/>
+    </profileApplication>
+    <profileApplication xmi:type='uml:ProfileApplication' xmi:id='idl2xmi-profileApplication__ComponentIDL'>
+      <appliedProfile href='https://www.omg.org/spec/CCCMP/20070501#EAPK_EF67E907_FC69_420a_9A9F_E206AAEDAD77'/>
+    </profileApplication>
+    <profileApplication xmi:type='uml:ProfileApplication' xmi:id='idl2xmi-profileApplication__IDL4'>
+      <appliedProfile href='https://www.remedy.nl/idl2xmi/profile/IDL4/1.0'/>
+    </profileApplication>
   </uml:Model>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__void' base_DataType='idl2xmi-CORBA__void'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__boolean' base_DataType='idl2xmi-CORBA__boolean'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__char' base_DataType='idl2xmi-CORBA__char'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__wchar' base_DataType='idl2xmi-CORBA__wchar'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__octet' base_DataType='idl2xmi-CORBA__octet'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__short' base_DataType='idl2xmi-CORBA__short'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__unsignedShort' base_DataType='idl2xmi-CORBA__unsignedShort'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__long' base_DataType='idl2xmi-CORBA__long'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__unsignedLong' base_DataType='idl2xmi-CORBA__unsignedLong'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__longLong' base_DataType='idl2xmi-CORBA__longLong'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__unsignedLongLong' base_DataType='idl2xmi-CORBA__unsignedLongLong'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__float' base_DataType='idl2xmi-CORBA__float'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__double' base_DataType='idl2xmi-CORBA__double'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__longDouble' base_DataType='idl2xmi-CORBA__longDouble'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__any' base_DataType='idl2xmi-CORBA__any'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__string' base_DataType='idl2xmi-CORBA__string'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__wstring' base_DataType='idl2xmi-CORBA__wstring'/>
+  <BaseIDL:CORBAInterface xmi:id='idl2xmi-profile__BaseIDL__CORBAInterface__idl2xmi-CORBA__Object' base_Interface='idl2xmi-CORBA__Object' isLocal='false'/>
+  <BaseIDL:CORBAValue xmi:id='idl2xmi-profile__BaseIDL__CORBAValue__idl2xmi-CORBA__ValueBase' base_Interface='idl2xmi-CORBA__ValueBase' isCustom='false' isTruncatable='false'/>
+  <IDL4:Primitive xmi:id='idl2xmi-profile__IDL4__Primitive__idl2xmi-CORBA__int8' base_DataType='idl2xmi-CORBA__int8' idlName='int8'/>
+  <IDL4:Primitive xmi:id='idl2xmi-profile__IDL4__Primitive__idl2xmi-CORBA__uint8' base_DataType='idl2xmi-CORBA__uint8' idlName='uint8'/>
+  <BaseIDL:CORBAInterface xmi:id='idl2xmi-profile__BaseIDL__CORBAInterface__idl2xmi-Control' base_Interface='idl2xmi-Control' isLocal='false'/>
+  <IDL4:OperationContext xmi:id='idl2xmi-profile__IDL4__OperationContext__idl2xmi-Control__start' base_Operation='idl2xmi-Control__start' value='region trace-id'/>
+  <BaseIDL:CORBAValue xmi:id='idl2xmi-profile__BaseIDL__CORBAValue__idl2xmi-BaseRecord' base_Interface='idl2xmi-BaseRecord' isCustom='false' isTruncatable='false'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-BaseRecord__key' base_Property='idl2xmi-BaseRecord__key' identifier='key'/>
+  <BaseIDL:CORBAValueMember xmi:id='idl2xmi-profile__BaseIDL__CORBAValueMember__idl2xmi-BaseRecord__key' base_Property='idl2xmi-BaseRecord__key' isPublicMember='true'/>
+  <BaseIDL:CORBAException xmi:id='idl2xmi-profile__BaseIDL__CORBAException__idl2xmi-Failure' base_DataType='idl2xmi-Failure'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-Failure__reason' base_Property='idl2xmi-Failure__reason' identifier='reason'/>
+  <BaseIDL:CORBAValue xmi:id='idl2xmi-profile__BaseIDL__CORBAValue__idl2xmi-Record' base_Interface='idl2xmi-Record' isCustom='false' isTruncatable='true'/>
+  <BaseIDL:CORBASupports xmi:id='idl2xmi-profile__BaseIDL__CORBASupports__idl2xmi-idl2xmi-Record__supports__0' base_Generalization='idl2xmi-idl2xmi-Record__supports__0'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-Record__id' base_Property='idl2xmi-Record__id' identifier='id'/>
+  <BaseIDL:CORBAValueMember xmi:id='idl2xmi-profile__BaseIDL__CORBAValueMember__idl2xmi-Record__id' base_Property='idl2xmi-Record__id' isPublicMember='true'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-Record__label' base_Property='idl2xmi-Record__label' identifier='label'/>
+  <BaseIDL:CORBAValueMember xmi:id='idl2xmi-profile__BaseIDL__CORBAValueMember__idl2xmi-Record__label' base_Property='idl2xmi-Record__label' isPublicMember='false'/>
+  <BaseIDL:CORBAValueFactory xmi:id='idl2xmi-profile__BaseIDL__CORBAValueFactory__idl2xmi-Record__create' base_Operation='idl2xmi-Record__create'/>
+  <BaseIDL:CORBABoxedValue xmi:id='idl2xmi-profile__BaseIDL__CORBABoxedValue__idl2xmi-RecordBox' base_DataType='idl2xmi-RecordBox'/>
+  <BaseIDL:CORBAValue xmi:id='idl2xmi-profile__BaseIDL__CORBAValue__idl2xmi-Changed' base_Interface='idl2xmi-Changed' isCustom='false' isTruncatable='false'/>
+  <ComponentIDL:CORBAEvent xmi:id='idl2xmi-profile__ComponentIDL__CORBAEvent__idl2xmi-Changed' base_Interface='idl2xmi-Changed'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-Changed__value' base_Property='idl2xmi-Changed__value' identifier='value'/>
+  <BaseIDL:CORBAValueMember xmi:id='idl2xmi-profile__BaseIDL__CORBAValueMember__idl2xmi-Changed__value' base_Property='idl2xmi-Changed__value' isPublicMember='true'/>
+  <ComponentIDL:CORBAComponent xmi:id='idl2xmi-profile__ComponentIDL__CORBAComponent__idl2xmi-Worker' base_Class='idl2xmi-Worker'/>
+  <BaseIDL:CORBASupports xmi:id='idl2xmi-profile__BaseIDL__CORBASupports__idl2xmi-idl2xmi-Worker__supports__0' base_Generalization='idl2xmi-idl2xmi-Worker__supports__0'/>
+  <ComponentIDL:CORBAProvides xmi:id='idl2xmi-profile__ComponentIDL__CORBAProvides__idl2xmi-Worker__endpoint' base_Port='idl2xmi-Worker__endpoint'/>
+  <ComponentIDL:CORBAUses xmi:id='idl2xmi-profile__ComponentIDL__CORBAUses__idl2xmi-Worker__peers' base_Port='idl2xmi-Worker__peers' multiple='true'/>
+  <ComponentIDL:CORBAEmits xmi:id='idl2xmi-profile__ComponentIDL__CORBAEmits__idl2xmi-Worker__event_source' base_Port='idl2xmi-Worker__event_source'/>
+  <ComponentIDL:CORBAPublishes xmi:id='idl2xmi-profile__ComponentIDL__CORBAPublishes__idl2xmi-Worker__event_stream' base_Port='idl2xmi-Worker__event_stream'/>
+  <ComponentIDL:CORBAConsumes xmi:id='idl2xmi-profile__ComponentIDL__CORBAConsumes__idl2xmi-Worker__event_sink' base_Port='idl2xmi-Worker__event_sink'/>
+  <IDL4:Port xmi:id='idl2xmi-profile__IDL4__Port__idl2xmi-Worker__port_group' base_Port='idl2xmi-Worker__port_group' kind='port' multiple='false'/>
+  <IDL4:Port xmi:id='idl2xmi-profile__IDL4__Port__idl2xmi-Worker__mirrored_port_group' base_Port='idl2xmi-Worker__mirrored_port_group' kind='mirrorport' multiple='false'/>
+  <BaseIDL:CORBAValue xmi:id='idl2xmi-profile__BaseIDL__CORBAValue__idl2xmi-WorkerId' base_Interface='idl2xmi-WorkerId' isCustom='false' isTruncatable='false'/>
+  <BaseIDL:CORBAField xmi:id='idl2xmi-profile__BaseIDL__CORBAField__idl2xmi-WorkerId__value' base_Property='idl2xmi-WorkerId__value' identifier='value'/>
+  <BaseIDL:CORBAValueMember xmi:id='idl2xmi-profile__BaseIDL__CORBAValueMember__idl2xmi-WorkerId__value' base_Property='idl2xmi-WorkerId__value' isPublicMember='true'/>
+  <ComponentIDL:CORBAHome xmi:id='idl2xmi-profile__ComponentIDL__CORBAHome__idl2xmi-WorkerHome' base_Interface='idl2xmi-WorkerHome'/>
+  <ComponentIDL:CORBAManages xmi:id='idl2xmi-profile__ComponentIDL__CORBAManages__idl2xmi-WorkerHome__CORBAManages' base_Association='idl2xmi-WorkerHome__CORBAManages'/>
+  <ComponentIDL:CORBAPrimaryKey xmi:id='idl2xmi-profile__ComponentIDL__CORBAPrimaryKey__idl2xmi-WorkerHome__CORBAPrimaryKey' base_Association='idl2xmi-WorkerHome__CORBAPrimaryKey'/>
+  <ComponentIDL:CORBAFactory xmi:id='idl2xmi-profile__ComponentIDL__CORBAFactory__idl2xmi-WorkerHome__create' base_Operation='idl2xmi-WorkerHome__create'/>
+  <ComponentIDL:CORBAFinder xmi:id='idl2xmi-profile__ComponentIDL__CORBAFinder__idl2xmi-WorkerHome__find' base_Operation='idl2xmi-WorkerHome__find'/>
+  <IDL4:Connector xmi:id='idl2xmi-profile__IDL4__Connector__idl2xmi-BaseConnector' base_Component='idl2xmi-BaseConnector'/>
+  <IDL4:Connector xmi:id='idl2xmi-profile__IDL4__Connector__idl2xmi-LoggingConnector' base_Component='idl2xmi-LoggingConnector'/>
+  <ComponentIDL:CORBAProvides xmi:id='idl2xmi-profile__ComponentIDL__CORBAProvides__idl2xmi-LoggingConnector__facet' base_Port='idl2xmi-LoggingConnector__facet'/>
+  <ComponentIDL:CORBAUses xmi:id='idl2xmi-profile__ComponentIDL__CORBAUses__idl2xmi-LoggingConnector__subscribers' base_Port='idl2xmi-LoggingConnector__subscribers' multiple='true'/>
+  <IDL4:Port xmi:id='idl2xmi-profile__IDL4__Port__idl2xmi-LoggingConnector__port_group' base_Port='idl2xmi-LoggingConnector__port_group' kind='port' multiple='false'/>
+  <IDL4:Port xmi:id='idl2xmi-profile__IDL4__Port__idl2xmi-LoggingConnector__mirrored_port_group' base_Port='idl2xmi-LoggingConnector__mirrored_port_group' kind='mirrorport' multiple='false'/>
+  <IDL4:PortType xmi:id='idl2xmi-profile__IDL4__PortType__idl2xmi-ControlPorts' base_Interface='idl2xmi-ControlPorts'/>
+  <ComponentIDL:CORBAProvides xmi:id='idl2xmi-profile__ComponentIDL__CORBAProvides__idl2xmi-ControlPorts__endpoint' base_Port='idl2xmi-ControlPorts__endpoint'/>
+  <ComponentIDL:CORBAUses xmi:id='idl2xmi-profile__ComponentIDL__CORBAUses__idl2xmi-ControlPorts__observers' base_Port='idl2xmi-ControlPorts__observers' multiple='true'/>
 </xmi:XMI>
