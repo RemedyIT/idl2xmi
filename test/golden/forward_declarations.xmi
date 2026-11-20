@@ -1,11 +1,70 @@
-<xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20131001' xmlns:uml='http://www.omg.org/spec/UML/20161101' xmlns:idl2xmi='https://github.com/jwillemsen/idl2xmi/profile' xmi:version='2.5.1'>
+<xmi:XMI xmlns:xmi='http://www.omg.org/spec/XMI/20131001' xmlns:uml='http://www.omg.org/spec/UML/20161101' xmlns:BaseIDL='https://www.omg.org/spec/CCCMP/20070501/BaseIDL' xmlns:ComponentIDL='https://www.omg.org/spec/CCCMP/20070501/ComponentIDL' xmlns:IDL4='https://www.remedy.nl/idl2xmi/profile/IDL4/1.0' xmi:version='2.5.1'>
   <uml:Model xmi:id='idl2xmi-model' name='IDL model'>
-    <packagedElement xmi:type='uml:Package' xmi:id='idl2xmi-Forward' name='Forward'>
-      <idl2xmi:forwardDeclaration xmi:type='uml:Interface' xmi:id='idl2xmi-Forward__Unresolved' name='Unresolved'/>
-      <idl2xmi:forwardDeclaration xmi:type='uml:DataType' xmi:id='idl2xmi-Forward__Incomplete' name='Incomplete'/>
-      <idl2xmi:forwardDeclaration xmi:type='uml:DataType' xmi:id='idl2xmi-Forward__Choice' name='Choice'/>
-      <idl2xmi:forwardDeclaration xmi:type='uml:Class' xmi:id='idl2xmi-Forward__Value' name='Value'/>
-      <idl2xmi:forwardDeclaration xmi:type='uml:Component' xmi:id='idl2xmi-Forward__WorkerComponent' name='WorkerComponent'/>
+    <packagedElement xmi:type='uml:Package' xmi:id='idl2xmi-CORBA' name='CORBA'>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__void' name='void'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__boolean' name='boolean'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__char' name='char'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__wchar' name='wchar'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__octet' name='octet'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__short' name='short'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__unsignedShort' name='unsignedShort'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__long' name='long'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__unsignedLong' name='unsignedLong'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__longLong' name='longLong'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__unsignedLongLong' name='unsignedLongLong'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__float' name='float'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__double' name='double'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__longDouble' name='longDouble'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__any' name='any'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__string' name='string'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__wstring' name='wstring'/>
+      <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-CORBA__Object' name='Object'/>
+      <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-CORBA__ValueBase' name='ValueBase'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__int8' name='int8'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-CORBA__uint8' name='uint8'/>
     </packagedElement>
+    <packagedElement xmi:type='uml:Package' xmi:id='idl2xmi-Forward' name='Forward'>
+      <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-Forward__Unresolved' name='Unresolved'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Forward__Incomplete' name='Incomplete'/>
+      <packagedElement xmi:type='uml:DataType' xmi:id='idl2xmi-Forward__Choice' name='Choice'/>
+      <packagedElement xmi:type='uml:Interface' xmi:id='idl2xmi-Forward__Value' name='Value'/>
+      <packagedElement xmi:type='uml:Class' xmi:id='idl2xmi-Forward__WorkerComponent' name='WorkerComponent'/>
+    </packagedElement>
+    <profileApplication xmi:type='uml:ProfileApplication' xmi:id='idl2xmi-profileApplication__BaseIDL'>
+      <appliedProfile href='https://www.omg.org/spec/CCCMP/20070501#EAPK_C6301B3D_712C_46e5_827E_8DEE3343B2E7'/>
+    </profileApplication>
+    <profileApplication xmi:type='uml:ProfileApplication' xmi:id='idl2xmi-profileApplication__ComponentIDL'>
+      <appliedProfile href='https://www.omg.org/spec/CCCMP/20070501#EAPK_EF67E907_FC69_420a_9A9F_E206AAEDAD77'/>
+    </profileApplication>
+    <profileApplication xmi:type='uml:ProfileApplication' xmi:id='idl2xmi-profileApplication__IDL4'>
+      <appliedProfile href='https://www.remedy.nl/idl2xmi/profile/IDL4/1.0'/>
+    </profileApplication>
   </uml:Model>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__void' base_DataType='idl2xmi-CORBA__void'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__boolean' base_DataType='idl2xmi-CORBA__boolean'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__char' base_DataType='idl2xmi-CORBA__char'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__wchar' base_DataType='idl2xmi-CORBA__wchar'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__octet' base_DataType='idl2xmi-CORBA__octet'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__short' base_DataType='idl2xmi-CORBA__short'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__unsignedShort' base_DataType='idl2xmi-CORBA__unsignedShort'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__long' base_DataType='idl2xmi-CORBA__long'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__unsignedLong' base_DataType='idl2xmi-CORBA__unsignedLong'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__longLong' base_DataType='idl2xmi-CORBA__longLong'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__unsignedLongLong' base_DataType='idl2xmi-CORBA__unsignedLongLong'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__float' base_DataType='idl2xmi-CORBA__float'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__double' base_DataType='idl2xmi-CORBA__double'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__longDouble' base_DataType='idl2xmi-CORBA__longDouble'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__any' base_DataType='idl2xmi-CORBA__any'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__string' base_DataType='idl2xmi-CORBA__string'/>
+  <BaseIDL:CORBAPrimitive xmi:id='idl2xmi-profile__BaseIDL__CORBAPrimitive__idl2xmi-CORBA__wstring' base_DataType='idl2xmi-CORBA__wstring'/>
+  <BaseIDL:CORBAInterface xmi:id='idl2xmi-profile__BaseIDL__CORBAInterface__idl2xmi-CORBA__Object' base_Interface='idl2xmi-CORBA__Object' isLocal='false'/>
+  <BaseIDL:CORBAValue xmi:id='idl2xmi-profile__BaseIDL__CORBAValue__idl2xmi-CORBA__ValueBase' base_Interface='idl2xmi-CORBA__ValueBase' isCustom='false' isTruncatable='false'/>
+  <IDL4:Primitive xmi:id='idl2xmi-profile__IDL4__Primitive__idl2xmi-CORBA__int8' base_DataType='idl2xmi-CORBA__int8' idlName='int8'/>
+  <IDL4:Primitive xmi:id='idl2xmi-profile__IDL4__Primitive__idl2xmi-CORBA__uint8' base_DataType='idl2xmi-CORBA__uint8' idlName='uint8'/>
+  <BaseIDL:CORBAModule xmi:id='idl2xmi-profile__BaseIDL__CORBAModule__idl2xmi-Forward' base_Package='idl2xmi-Forward'/>
+  <IDL4:ForwardDeclaration xmi:id='idl2xmi-profile__IDL4__ForwardDeclaration__idl2xmi-Forward__Unresolved' base_Interface='idl2xmi-Forward__Unresolved'/>
+  <IDL4:ForwardDeclaration xmi:id='idl2xmi-profile__IDL4__ForwardDeclaration__idl2xmi-Forward__Incomplete' base_DataType='idl2xmi-Forward__Incomplete'/>
+  <IDL4:ForwardDeclaration xmi:id='idl2xmi-profile__IDL4__ForwardDeclaration__idl2xmi-Forward__Choice' base_DataType='idl2xmi-Forward__Choice'/>
+  <IDL4:ForwardDeclaration xmi:id='idl2xmi-profile__IDL4__ForwardDeclaration__idl2xmi-Forward__Value' base_Interface='idl2xmi-Forward__Value'/>
+  <IDL4:ForwardDeclaration xmi:id='idl2xmi-profile__IDL4__ForwardDeclaration__idl2xmi-Forward__WorkerComponent' base_Class='idl2xmi-Forward__WorkerComponent'/>
 </xmi:XMI>
