@@ -52,6 +52,12 @@ bundle exec ruby script/update_golden.rb
 - UML `type` attributes reference UML classifiers. A `CORBA` package contains
   the CCCMP primitive `DataType` classifiers; C++ spellings are not used as
   model type identities.
+- Anonymous template types (e.g. `fixed<8, 2>`) and template arguments are
+  named with their IDL spelling.
+- `xmi:id`s are stable and collision free: `idl2xmi-` plus the scoped name
+  with `::` written as `.` for declarations (`idl2xmi-M.S.field`), the owner
+  id plus `--part` for generated children (`idl2xmi-M.op--return`), and
+  `idl2xmi--` for built-in elements (`idl2xmi--CORBA.long`).
 - IDL 4 constructs missing from CCCMP use only the separate `IDL4` namespace.
   The complete gap analysis and proposed OMG resolution is in
   [docs/omg-idl4-xmi-proposal.md](docs/omg-idl4-xmi-proposal.md).

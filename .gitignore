@@ -4,3 +4,4 @@
 /vendor/
 /_ridl/
 *.xmi
+!/test/golden/**/*.xmi

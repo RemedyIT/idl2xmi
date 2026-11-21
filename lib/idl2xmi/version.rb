@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
-module Idl2xmi
-  VERSION = '0.1.0'
+module IDL
+  module Idl2xmi
+    VERSION = { major: 0, minor: 1, release: 0 }.freeze
+  end
 end

@@ -24,34 +24,26 @@ module IDL
       IDL4_PRIMITIVES = {
         IDL::Type::TinyShort => 'int8', IDL::Type::UTinyShort => 'uint8'
       }.freeze
-      CXX_TYPE_NAMES = {
-        IDL::Type::Void => 'void',
-        IDL::Type::Boolean => 'bool',
-        IDL::Type::Char => 'char',
-        IDL::Type::WChar => 'wchar_t',
-        IDL::Type::Octet => 'uint8_t',
-        IDL::Type::TinyShort => 'int8_t',
-        IDL::Type::UTinyShort => 'uint8_t',
-        IDL::Type::Short => 'int16_t',
-        IDL::Type::UShort => 'uint16_t',
-        IDL::Type::Long => 'int32_t',
-        IDL::Type::ULong => 'uint32_t',
-        IDL::Type::LongLong => 'int64_t',
-        IDL::Type::ULongLong => 'uint64_t',
-        IDL::Type::Float => 'float',
-        IDL::Type::Double => 'double',
-        IDL::Type::LongDouble => 'long double',
-        IDL::Type::Any => 'TAOX11_NAMESPACE::CORBA::Any',
-        IDL::Type::Object => 'TAOX11_NAMESPACE::CORBA::Object',
-        IDL::Type::ValueBase => 'TAOX11_NAMESPACE::CORBA::ValueBase',
-        IDL::Type::Native => 'void*',
-        IDL::Type::String => 'std::string',
-        IDL::Type::WString => 'std::wstring'
+      # IDL source spellings, used to name anonymous template classifiers and
+      # template arguments. These are language neutral by design.
+      IDL_TYPE_NAMES = {
+        IDL::Type::Void => 'void', IDL::Type::Boolean => 'boolean',
+        IDL::Type::Char => 'char', IDL::Type::WChar => 'wchar',
+        IDL::Type::Octet => 'octet', IDL::Type::TinyShort => 'int8',
+        IDL::Type::UTinyShort => 'uint8', IDL::Type::Short => 'short',
+        IDL::Type::UShort => 'unsigned short', IDL::Type::Long => 'long',
+        IDL::Type::ULong => 'unsigned long', IDL::Type::LongLong => 'long long',
+        IDL::Type::ULongLong => 'unsigned long long', IDL::Type::Float => 'float',
+        IDL::Type::Double => 'double', IDL::Type::LongDouble => 'long double',
+        IDL::Type::Any => 'any', IDL::Type::Object => 'Object',
+        IDL::Type::ValueBase => 'ValueBase', IDL::Type::Native => 'native'
       }.freeze
+      ID_PREFIX = 'idl2xmi'.freeze
 
       def initialize(output)
         @output = output
         @document = REXML::Document.new
+        @document << REXML::XMLDecl.new('1.0', 'UTF-8')
         @xmi = REXML::Element.new('xmi:XMI')
         @xmi.add_namespace('xmi', XMI_NS)
         @xmi.add_namespace('uml', UML_NS)
@@ -60,13 +52,14 @@ module IDL
         @xmi.add_namespace('IDL4', IDL4_NS)
         @xmi.add_attribute('xmi:version', '2.5.1')
         @model = REXML::Element.new('uml:Model')
-        @model.add_attribute('xmi:id', 'idl2xmi-model')
+        @model.add_attribute('xmi:id', builtin_id('model'))
         @model.add_attribute('name', 'IDL model')
         @xmi.add_element(@model)
         @document.add_element(@xmi)
         @containers = [@model]
         @elements_by_name = {}
         @forward_declarations = {}
+        @defined_classifiers = {}
         @profile_applications = []
         @template_types = {}
         @constants_containers = {}
@@ -78,7 +71,12 @@ module IDL
         emit_deferred_nodes(parser.root) if parser.respond_to?(:root) && parser.root
         emit_forward_declarations
         emit_profile_applications
-        @document.write(@output, 2)
+        # compact keeps text content (e.g. comment bodies) free of the
+        # whitespace that plain indentation would inject into it.
+        formatter = REXML::Formatters::Pretty.new(2)
+        formatter.compact = true
+        formatter.width = Float::INFINITY
+        formatter.write(@document, @output)
         @output.write("\n")
       end
 
@@ -100,13 +98,13 @@ module IDL
 
       def visit_include(node)
         include_element = extension_element('include')
-        include_element.add_attribute('xmi:id', stable_id("include::#{node.filename}"))
+        include_element.add_attribute('xmi:id', builtin_id('include', node.filename))
         include_element.add_attribute('filename', node.filename.to_s)
         current_container.add_element(include_element)
       end
 
       def enter_interface(node)
-        @forward_declarations.delete(node.scoped_name)
+        mark_defined(node)
         interface = element('packagedElement', 'uml:Interface', node)
         interface.add_attribute('isAbstract', node.is_abstract?.to_s)
         apply_profile('BaseIDL', 'CORBAInterface', 'base_Interface', interface,
@@ -126,7 +124,7 @@ module IDL
       end
 
       def enter_component(node)
-        @forward_declarations.delete(node.scoped_name)
+        mark_defined(node)
         component = element('packagedElement', 'uml:Class', node)
         apply_profile('ComponentIDL', 'CORBAComponent', 'base_Class', component)
         add_generalizations(component, node, [node.base].compact)
@@ -206,13 +204,13 @@ module IDL
 
       def visit_valuebox(node)
         valuebox = element('packagedElement', 'uml:DataType', node)
-        add_generalization_to_type(valuebox, node.boxed_type, "#{node.scoped_name}::boxed")
+        add_generalization_to_type(valuebox, node.boxed_type, synthetic_id(valuebox.attributes['xmi:id'], 'boxed'))
         apply_profile('BaseIDL', 'CORBABoxedValue', 'base_DataType', valuebox)
         current_container.add_element(valuebox)
       end
 
       def enter_valuetype(node)
-        @forward_declarations.delete(node.scoped_name)
+        mark_defined(node)
         valuetype = element('packagedElement', 'uml:Interface', node)
         valuetype.add_attribute('isAbstract', node.is_abstract?.to_s)
         apply_profile('BaseIDL', 'CORBAValue', 'base_Interface', valuetype,
@@ -261,7 +259,7 @@ module IDL
       end
 
       def enter_struct(node)
-        @forward_declarations.delete(node.scoped_name)
+        mark_defined(node)
         datatype = element('packagedElement', 'uml:DataType', node)
         apply_profile('BaseIDL', 'CORBAStruct', 'base_DataType', datatype)
         current_container.add_element(datatype)
@@ -305,8 +303,13 @@ module IDL
         literal.add_attribute('xmi:type', 'uml:EnumerationLiteral')
         literal.add_attribute('xmi:id', stable_id(node.scoped_name))
         literal.add_attribute('name', node.lm_name.to_s)
-        apply_idl4_profile('EnumLiteralValue', 'base_EnumerationLiteral', literal,
-                           'value' => node.value.to_s)
+        # UML literal order already carries the implicit CORBA ordinal; only
+        # an IDL 4 explicit @value needs the extension stereotype.
+        ordinal = node.enum.enumerators.index(node)
+        unless node.value.nil? || node.value == ordinal
+          apply_idl4_profile('EnumLiteralValue', 'base_EnumerationLiteral', literal,
+                             'value' => node.value.to_s)
+        end
         apply_annotations(literal, node)
         @elements_by_name[node.enum.scoped_name]&.add_element(literal)
       end
@@ -341,8 +344,8 @@ module IDL
           property = REXML::Element.new('ownedAttribute')
           property.add_attribute('xmi:type', 'uml:Property')
           property_name = field.lm_name.to_s
-          property_id = property_name.empty? ? "#{node.scoped_name}::bitfield#{index}" : field.scoped_name
-          property.add_attribute('xmi:id', stable_id(property_id))
+          property_id = property_name.empty? ? synthetic_id(bitset.attributes['xmi:id'], "bitfield#{index}") : stable_id(field.scoped_name)
+          property.add_attribute('xmi:id', property_id)
           property.add_attribute('name', property_name) unless property_name.empty?
           property.add_attribute('type', member_type_id(field.idltype))
           apply_idl4_profile('BitField', 'base_Property', property,
@@ -357,12 +360,12 @@ module IDL
       end
 
       def enter_union(node)
-        @forward_declarations.delete(node.scoped_name)
+        mark_defined(node)
         union = element('packagedElement', 'uml:DataType', node)
         apply_profile('BaseIDL', 'CORBAUnion', 'base_DataType', union)
         discriminator = REXML::Element.new('ownedAttribute')
         discriminator.add_attribute('xmi:type', 'uml:Property')
-        discriminator.add_attribute('xmi:id', stable_id("#{node.scoped_name}::discriminator"))
+        discriminator.add_attribute('xmi:id', synthetic_id(union.attributes['xmi:id'], 'discriminator'))
         discriminator.add_attribute('name', 'discriminator')
         discriminator.add_attribute('type', type_id(node.switchtype))
         discriminator.add_attribute('isOrdered', 'true')
@@ -398,7 +401,7 @@ module IDL
         constant.add_attribute('type', member_type_id(node.idltype))
         constant.add_attribute('isStatic', 'true')
         constant.add_attribute('isReadOnly', 'true')
-        constant.add_attribute('default', node.value.to_s) unless node.value.nil?
+        add_default_value(constant, node.value) unless node.value.nil?
         apply_annotations(constant, node)
         constant_owner.add_element(constant)
         apply_profile('BaseIDL', 'CORBAConstant', 'base_Property', constant,
@@ -427,11 +430,10 @@ module IDL
         unless IDL::Type::Void === node.idltype
           result = REXML::Element.new('ownedParameter')
           result.add_attribute('xmi:type', 'uml:Parameter')
-          result.add_attribute('xmi:id', stable_id("#{node.scoped_name}::return"))
+          result.add_attribute('xmi:id', synthetic_id(operation.attributes['xmi:id'], 'return'))
           result.add_attribute('name', 'return')
           result.add_attribute('type', member_type_id(node.idltype))
           result.add_attribute('direction', 'return')
-          apply_annotations(result, node)
           operation.add_element(result)
         end
         node.params.each do |parameter|
@@ -628,7 +630,7 @@ module IDL
         @constants_containers[key] ||= begin
           constants = REXML::Element.new('packagedElement')
           constants.add_attribute('xmi:type', 'uml:Class')
-          constants.add_attribute('xmi:id', stable_id("#{key}::Constants"))
+          constants.add_attribute('xmi:id', synthetic_id(key, 'Constants'))
           constants.add_attribute('name', 'Constants')
           current_container.add_element(constants)
           apply_profile('BaseIDL', 'CORBAConstants', 'base_Class', constants)
@@ -640,12 +642,12 @@ module IDL
         type = node.idltype
         case type
         when IDL::Type::Array
-          add_template_members(alias_type, type.basetype, 1, 1, node.scoped_name)
+          add_template_members(alias_type, type.basetype, 1, 1)
           apply_profile('BaseIDL', 'CORBAArray', 'base_DataType', alias_type,
                         'index' => type.sizes.map { |size| constant_value(size) }.join(','))
         when IDL::Type::Sequence
-          upper = type.size ? constant_value(type.size).to_i - 1 : '*'
-          add_template_members(alias_type, type.basetype, 0, upper, node.scoped_name)
+          upper = type.size ? constant_value(type.size).to_i : '*'
+          add_template_members(alias_type, type.basetype, 0, upper)
           tags = type.size ? { 'bound' => constant_value(type.size).to_s } : {}
           apply_profile('BaseIDL', 'CORBASequence', 'base_DataType', alias_type, tags)
         when IDL::Type::String, IDL::Type::WString
@@ -654,7 +656,7 @@ module IDL
             apply_profile('BaseIDL', stereotype, 'base_DataType', alias_type,
                           'bound' => constant_value(type.size).to_s)
           else
-            add_generalization_to_type(alias_type, type, "#{node.scoped_name}::alias")
+            add_generalization_to_type(alias_type, type, synthetic_id(alias_type.attributes['xmi:id'], 'alias'))
             apply_profile('BaseIDL', 'CORBATypeDef', 'base_DataType', alias_type)
           end
         when IDL::Type::Fixed
@@ -666,15 +668,30 @@ module IDL
                              'valueType' => standard_type_id(type.valuetype),
                              'bound' => (constant_value(type.size).to_s if type.size))
         else
-          add_generalization_to_type(alias_type, type, "#{node.scoped_name}::alias")
+          add_generalization_to_type(alias_type, type, synthetic_id(alias_type.attributes['xmi:id'], 'alias'))
           apply_profile('BaseIDL', 'CORBATypeDef', 'base_DataType', alias_type)
         end
       end
 
-      def add_template_members(container, element_type, lower, upper, scope)
+      # UML Property::default is derived; serialize a proper ValueSpecification.
+      def add_default_value(property, value)
+        literal_type, literal_value = case value
+                                      when true, false then ['uml:LiteralBoolean', value.to_s]
+                                      when Integer then ['uml:LiteralInteger', value.to_s]
+                                      when Float then ['uml:LiteralReal', value.to_s]
+                                      else ['uml:LiteralString', value.to_s]
+                                      end
+        default_value = REXML::Element.new('defaultValue')
+        default_value.add_attribute('xmi:type', literal_type)
+        default_value.add_attribute('xmi:id', synthetic_id(property.attributes['xmi:id'], 'defaultValue'))
+        default_value.add_attribute('value', literal_value)
+        property.add_element(default_value)
+      end
+
+      def add_template_members(container, element_type, lower, upper)
         members = REXML::Element.new('ownedAttribute')
         members.add_attribute('xmi:type', 'uml:Property')
-        members.add_attribute('xmi:id', stable_id("#{scope}::members"))
+        members.add_attribute('xmi:id', synthetic_id(container.attributes['xmi:id'], 'members'))
         members.add_attribute('name', 'members')
         members.add_attribute('type', type_id(element_type))
         members.add_attribute('lower', lower.to_s)
@@ -685,12 +702,12 @@ module IDL
       def add_component_association(node, home, stereotype, target_type)
         association = REXML::Element.new('packagedElement')
         association.add_attribute('xmi:type', 'uml:Association')
-        association.add_attribute('xmi:id', stable_id("#{node.scoped_name}::#{stereotype}"))
+        association.add_attribute('xmi:id', synthetic_id(home.attributes['xmi:id'], stereotype))
         association.add_attribute('name', stereotype)
         [[home.attributes['xmi:id'], 'home'], [type_id(target_type), 'target']].each do |type, role|
           owned_end = REXML::Element.new('ownedEnd')
           owned_end.add_attribute('xmi:type', 'uml:Property')
-          owned_end.add_attribute('xmi:id', stable_id("#{node.scoped_name}::#{stereotype}::#{role}"))
+          owned_end.add_attribute('xmi:id', synthetic_id(home.attributes['xmi:id'], stereotype, role))
           owned_end.add_attribute('name', role)
           owned_end.add_attribute('type', type)
           association.add_element(owned_end)
@@ -706,7 +723,7 @@ module IDL
       def apply_profile(prefix, stereotype, base_attribute, target, tags = {})
         application = REXML::Element.new("#{prefix}:#{stereotype}")
         element_id = target.attributes['xmi:id']
-        application.add_attribute('xmi:id', stable_id("profile::#{prefix}::#{stereotype}::#{element_id}"))
+        application.add_attribute('xmi:id', synthetic_id(element_id, prefix, stereotype))
         application.add_attribute(base_attribute, element_id)
         tags.each { |name, value| application.add_attribute(name, value) unless value.nil? }
         @profile_applications << application
@@ -726,7 +743,7 @@ module IDL
       def add_profile_application(name, fragment, href = CCCMP_ARTIFACT)
         application = REXML::Element.new('profileApplication')
         application.add_attribute('xmi:type', 'uml:ProfileApplication')
-        application.add_attribute('xmi:id', stable_id("profileApplication::#{name}"))
+        application.add_attribute('xmi:id', builtin_id('profileApplication', name))
         profile = REXML::Element.new('appliedProfile')
         profile.add_attribute('href', fragment ? "#{href}##{fragment}" : href)
         application.add_element(profile)
@@ -736,7 +753,7 @@ module IDL
       def emit_corba_primitive_package
         package = REXML::Element.new('packagedElement')
         package.add_attribute('xmi:type', 'uml:Package')
-        package.add_attribute('xmi:id', stable_id('CORBA'))
+        package.add_attribute('xmi:id', builtin_id('CORBA'))
         package.add_attribute('name', 'CORBA')
         @model.add_element(package)
 
@@ -769,7 +786,7 @@ module IDL
       end
 
       def primitive_id(name)
-        stable_id("CORBA::#{name}")
+        builtin_id('CORBA', name)
       end
 
       def element(tag, xmi_type, node)
@@ -782,45 +799,33 @@ module IDL
         result
       end
 
+      # IDL source spelling of a type, e.g. "sequence<long, 3>" or "::M::T".
       def idl_type_name(type)
-        if type.respond_to?(:cxx_type)
-          type.cxx_type
-        elsif IDL::Type::Const === type
+        case type
+        when IDL::Type::Const
           idl_type_name(type.type)
-        elsif IDL::Type::NodeType === type
+        when IDL::Type::NodeType
           "::#{type.node.scoped_name}"
-        elsif IDL::Type::Array === type
-          type.sizes.reverse.inject(idl_type_name(type.basetype)) do |element_type, size|
-            dimension = constant_value(size)
-            "std::array<#{element_type}, #{dimension}>"
-          end
-        elsif IDL::Type::Sequence === type
-          element_type = idl_type_name(type.basetype)
-          type.size ? "TAOX11_NAMESPACE::IDL::bounded_vector<#{element_type}, #{constant_value(type.size)}>" : "std::vector<#{element_type}>"
-        elsif IDL::Type::Map === type
-          key_type = idl_type_name(type.keytype)
-          value_type = idl_type_name(type.valuetype)
-          type.size ? "TAOX11_NAMESPACE::IDL::bounded_map<#{key_type}, #{value_type}, #{constant_value(type.size)}>" : "std::map<#{key_type}, #{value_type}>"
-        elsif IDL::Type::String === type || IDL::Type::WString === type
-          bounded_type_name(type.class == IDL::Type::String ? 'TAOX11_IDL::bounded_string' : 'TAOX11_IDL::bounded_wstring', type.size)
-        elsif IDL::Type::Fixed === type
-          type.digits ? "TAOX11_NAMESPACE::IDL::Fixed<#{type.digits}, #{type.scale}>" : 'TAOX11_NAMESPACE::IDL::Fixed'
+        when IDL::Type::Array
+          idl_type_name(type.basetype) + type.sizes.map { |size| "[#{constant_value(size)}]" }.join
+        when IDL::Type::Sequence
+          bounded_idl_name('sequence', [idl_type_name(type.basetype)], type.size)
+        when IDL::Type::Map
+          bounded_idl_name('map', [idl_type_name(type.keytype), idl_type_name(type.valuetype)], type.size)
+        when IDL::Type::WString
+          type.size ? "wstring<#{constant_value(type.size)}>" : 'wstring'
+        when IDL::Type::String
+          type.size ? "string<#{constant_value(type.size)}>" : 'string'
+        when IDL::Type::Fixed
+          type.digits ? "fixed<#{type.digits}, #{type.scale}>" : 'fixed'
         else
-          CXX_TYPE_NAMES.fetch(type.class, type.typename.to_s)
+          IDL_TYPE_NAMES.fetch(type.class) { type.typename.to_s }
         end
       end
 
-      def bounded_type_name(name, bound)
-        type_name = if name == 'TAOX11_IDL::bounded_string' && bound.nil?
-                      'std::string'
-                    elsif name == 'TAOX11_IDL::bounded_wstring' && bound.nil?
-                      'std::wstring'
-                    elsif bound
-                      "#{name}<#{bound}>"
-                    else
-                      name
-                    end
-        type_name
+      def bounded_idl_name(keyword, arguments, bound)
+        arguments += [constant_value(bound).to_s] if bound
+        "#{keyword}<#{arguments.join(', ')}>"
       end
 
       def union_label(label)
@@ -873,7 +878,7 @@ module IDL
 
         classifier = REXML::Element.new('packagedElement')
         classifier.add_attribute('xmi:type', 'uml:DataType')
-        classifier.add_attribute('xmi:id', stable_id("CORBA::template::#{signature}"))
+        classifier.add_attribute('xmi:id', builtin_id('CORBA', 'anonymous', signature))
         classifier.add_attribute('name', signature)
         @corba_package.add_element(classifier)
         @template_types[signature] = classifier.attributes['xmi:id']
@@ -887,12 +892,12 @@ module IDL
           apply_profile('BaseIDL', 'CORBAFixed', 'base_DataType', classifier,
                         'digits' => type.digits.to_s, 'scale' => type.scale.to_s)
         when IDL::Type::Sequence
-          upper = type.size ? constant_value(type.size).to_i - 1 : '*'
-          add_template_members(classifier, type.basetype, 0, upper, signature)
+          upper = type.size ? constant_value(type.size).to_i : '*'
+          add_template_members(classifier, type.basetype, 0, upper)
           tags = type.size ? { 'bound' => constant_value(type.size).to_s } : {}
           apply_profile('BaseIDL', 'CORBAAnonymousSequence', 'base_DataType', classifier, tags)
         when IDL::Type::Array
-          add_template_members(classifier, type.basetype, 1, 1, signature)
+          add_template_members(classifier, type.basetype, 1, 1)
           apply_profile('BaseIDL', 'CORBAAnonymousArray', 'base_DataType', classifier,
                         'index' => type.sizes.map { |size| constant_value(size) }.join(','))
         when IDL::Type::Map
@@ -909,10 +914,10 @@ module IDL
         @template_types[signature]
       end
 
-      def add_generalization_to_type(target, type, suffix)
+      def add_generalization_to_type(target, type, id)
         generalization = REXML::Element.new('generalization')
         generalization.add_attribute('xmi:type', 'uml:Generalization')
-        generalization.add_attribute('xmi:id', stable_id(suffix))
+        generalization.add_attribute('xmi:id', id)
         generalization.add_attribute('general', type_id(type))
         target.add_element(generalization)
       end
@@ -967,6 +972,10 @@ module IDL
       end
 
       def declare_classifier(node, xmi_type)
+        # A forward declaration after the full definition is legal IDL and
+        # must not produce a second element with the same xmi:id.
+        return if @defined_classifiers.key?(node.scoped_name)
+
         @forward_declarations[node.scoped_name] = [node, xmi_type]
       end
 
@@ -983,7 +992,7 @@ module IDL
           general = base.respond_to?(:node) ? base.node : base
           generalization = REXML::Element.new('generalization')
           generalization.add_attribute('xmi:type', 'uml:Generalization')
-          generalization.add_attribute('xmi:id', stable_id("#{node.scoped_name}::#{general.scoped_name}"))
+          generalization.add_attribute('xmi:id', synthetic_id(target.attributes['xmi:id'], 'generalization', general.scoped_name))
           generalization.add_attribute('general', stable_id(general.scoped_name))
           target.add_element(generalization)
         end
@@ -996,7 +1005,7 @@ module IDL
           references.each_with_index do |reference, index|
             generalization = REXML::Element.new('generalization')
             generalization.add_attribute('xmi:type', 'uml:Generalization')
-            generalization.add_attribute('xmi:id', stable_id("#{target.attributes['xmi:id']}::supports::#{index}"))
+            generalization.add_attribute('xmi:id', synthetic_id(target.attributes['xmi:id'], 'supports', index))
             generalization.add_attribute('general', type_id(reference))
             target.add_element(generalization)
             apply_profile('BaseIDL', 'CORBASupports', 'base_Generalization', generalization)
@@ -1024,7 +1033,7 @@ module IDL
         node.annotations.each do |annotation|
           comment = REXML::Element.new('ownedComment')
           comment.add_attribute('xmi:type', 'uml:Comment')
-          comment.add_attribute('xmi:id', stable_id("#{node.scoped_name}::annotation#{index}"))
+          comment.add_attribute('xmi:id', synthetic_id(target.attributes['xmi:id'], "annotation#{index}"))
           comment.add_attribute('annotatedElement', target.attributes['xmi:id'])
           values = annotation.fields.map { |name, value| "#{name}=#{annotation_value(value)}" }.join(';')
           body = REXML::Element.new('body')
@@ -1048,8 +1057,33 @@ module IDL
         end
       end
 
+      # IDs are built so that distinct inputs can never map to the same id:
+      # - user declarations: "idl2xmi-" + scoped name, with "::" written as "."
+      # - synthetic children: owner id + "--" + part (e.g. "--return")
+      # - built-in elements:  "idl2xmi--" + parts (e.g. the CORBA primitives)
+      # IDL identifiers only contain [A-Za-z0-9_], so "." and "-" are free to
+      # act as separators; any other character is escaped as "-HH".
       def stable_id(name)
-        "idl2xmi-#{name.to_s.gsub(/[^A-Za-z0-9_.-]/, '_')}"
+        "#{ID_PREFIX}-#{escape_id(name)}"
+      end
+
+      def synthetic_id(owner_id, *parts)
+        ([owner_id] + parts.map { |part| escape_id(part) }).join('--')
+      end
+
+      def builtin_id(*parts)
+        "#{ID_PREFIX}--#{parts.map { |part| escape_id(part) }.join('.')}"
+      end
+
+      def escape_id(name)
+        name.to_s.gsub(/::|[^A-Za-z0-9_]/) do |match|
+          match == '::' ? '.' : match.bytes.map { |byte| format('-%02X', byte) }.join
+        end
+      end
+
+      def mark_defined(node)
+        @forward_declarations.delete(node.scoped_name)
+        @defined_classifiers[node.scoped_name] = true
       end
     end
   end
